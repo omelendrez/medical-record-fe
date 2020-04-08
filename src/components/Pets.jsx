@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react'
 import Pet from './Pet'
 import { getPets } from '../services/pets'
 
-const Pets = () => {
+const Pets = ({ filter }) => {
 
   const [pets, setPets] = useState({ rows: [] })
 
   useEffect(() => {
-    getPets()
+    getPets(filter)
       .then(pets => setPets(pets))
-  }, [])
+  }, [filter])
 
   const { rows } = pets
 
