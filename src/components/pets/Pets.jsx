@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Pet from './Pet'
-import { getPets } from '../services/pets'
+import { getPets } from '../../services/pets'
 
 const Pets = ({ filter }) => {
 
