@@ -1,17 +1,18 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Redirect } from 'react-router-dom'
-import { saveCustomer } from '../../services/customers'
+import { saveCustomer, getCustomer } from '../../services/customers'
 
 const CustomerForm = props => {
   const [back, setBack] = useState(false)
   const [error, setError] = useState('')
-  const [form, setForm] = useState({
-    name: '',
-    address: '',
-    phone: '',
-    email: '',
-    observations: ''
-  })
+
+  const [form, setForm] = useState({})
+
+  useEffect(() => {
+    getCustomer(props.match.params.id)
+      .then(customer => setForm(customer))
+  }, [])
+
 
   const handleChange = (e => {
     e.preventDefault()
@@ -22,7 +23,9 @@ const CustomerForm = props => {
     })
   })
 
+
   const handleSave = (e => {
+    e.preventDefault()
     saveCustomer(form)
       .then(() => setBack(true))
       .catch(err => {
@@ -36,7 +39,7 @@ const CustomerForm = props => {
       <div className="container">
         <div className="row">
           <div className="container col-8">
-            <h1 className="my-3">Nuevo Cliente</h1>
+            <h1 className="my-3">Editando Cliente</h1>
             <form>
               <div className="form-row">
                 <div className="col">
@@ -107,7 +110,7 @@ const CustomerForm = props => {
               <button
                 type="submit"
                 className="btn btn-primary"
-                onClick={() => handleSave()}
+                onClick={e => handleSave(e)}
               >Guardar</button>
 
               <button
