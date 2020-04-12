@@ -1,17 +1,25 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Redirect } from 'react-router-dom'
-import { savePet } from '../../services/pets'
+import { saveConsultation, getConsultation } from '../../services/consultations'
 
-const PetForm = props => {
+const ConsultationForm = props => {
   const [back, setBack] = useState(false)
   const [error, setError] = useState('')
+
   const [form, setForm] = useState({
-    customerId: props.match.params.id,
-    name: '',
-    type: '',
-    breed: '',
+    id: '',
+    date: '',
+    diagnosis: '',
+    treatment: '',
+    nextConsultation: '',
     observations: ''
   })
+
+  useEffect(() => {
+    getConsultation(props.match.params.id)
+      .then(consultation => setForm(consultation))
+  }, [props.match.params.id])
+
 
   const handleChange = (e => {
     e.preventDefault()
@@ -22,75 +30,49 @@ const PetForm = props => {
     })
   })
 
+
   const handleSave = (e => {
     e.preventDefault()
-    savePet(form)
+    saveConsultation(form)
       .then(() => setBack(true))
       .catch(err => {
         setError(err.response.data.error)
       })
   })
 
+  console.log(form)
+
   return (
     <>
-      {back && <Redirect to={`/clientes/${props.match.params.id}`} />}
-      <div
-        className="container">
+      {back && <Redirect to="/consultas" />}
+      <div className="container">
         <div className="row">
           <div className="container col-8">
-            <h1 className="my-3">Nuevo Paciente</h1>
+            <h1 className="my-3">Editando Consulta</h1>
             <form>
               <div className="form-row">
                 <div className="col">
                   <div className="form-group">
-                    <label htmlFor="name">Nombre del Paciente</label>
+                    <label htmlFor="date">Fecha consulta</label>
                     <input
                       type="text"
                       className="form-control"
-                      id="name"
+                      id="date"
                       onChange={e => handleChange(e)}
-                      value={form.name}
+                      value={form.date}
                       required
                     />
                   </div>
                 </div>
                 <div className="col">
                   <div className="form-group">
-                    <label htmlFor="type">Tipo</label>
+                    <label htmlFor="diagnosis">Diagnostico</label>
                     <input
                       type="text"
                       className="form-control"
-                      id="type"
+                      id="diagnosis"
                       onChange={e => handleChange(e)}
-                      value={form.type}
-                      required
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="form-row">
-                <div className="col">
-                  <div className="form-group">
-                    <label htmlFor="breed">Raza</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="breed"
-                      onChange={e => handleChange(e)}
-                      value={form.breed}
-                      required
-                    />
-                  </div>
-                </div>
-                <div className="col">
-                  <div className="form-group">
-                    <label htmlFor="sex">Sexo</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="sex"
-                      onChange={e => handleChange(e)}
-                      value={form.sex}
+                      value={form.diagnosis}
                       required
                     />
                   </div>
@@ -99,26 +81,26 @@ const PetForm = props => {
               <div className="form-row">
                 <div className="col">
                   <div className="form-group">
-                    <label htmlFor="weight">Peso</label>
+                    <label htmlFor="treatment">Tratamiento</label>
                     <input
                       type="text"
                       className="form-control"
-                      id="weight"
+                      id="treatment"
                       onChange={e => handleChange(e)}
-                      value={form.weight}
+                      value={form.treatment}
                       required
                     />
                   </div>
                 </div>
                 <div className="col">
                   <div className="form-group">
-                    <label htmlFor="yearBorn">Año de Nacimiento</label>
+                    <label htmlFor="nextConsultation">Proxima consulta</label>
                     <input
-                      type="text"
+                      type="nextConsultation"
                       className="form-control"
-                      id="yearBorn"
+                      id="nextConsultation"
                       onChange={e => handleChange(e)}
-                      value={form.yearBorn}
+                      value={form.nextConsultation}
                       required
                     />
                   </div>
@@ -156,4 +138,4 @@ const PetForm = props => {
   )
 }
 
-export default PetForm
+export default ConsultationForm
