@@ -1,11 +1,20 @@
 .main-container {
   display: flex;
   flex-direction: row;
+  width: 100vw;
 }
 
 .customer,
 .consultations {
   border: 0;
+}
+
+.consultations .consultations-list  {
+  height: 80vh;
+}
+
+.customer .card-body {
+  flex: unset;
 }
 
 .customer .container {
@@ -29,6 +38,10 @@
   font-weight: bold;
 }
 
+.customer .pets .list-group-item {
+  cursor: pointer;
+}
+
 .customer .pets .pet {
   margin-right: 20px;
 }
@@ -37,4 +50,7 @@
   padding: 10px;
   border-radius: 6px;
   border: 1px solid #ccc;
+  max-width: 80vw;
+  margin-right: 4px;
+  margin-bottom: 4px;
 }

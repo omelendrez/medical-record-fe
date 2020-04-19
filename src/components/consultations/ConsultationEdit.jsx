@@ -16,9 +16,9 @@ const ConsultationForm = props => {
   })
 
   useEffect(() => {
-    getConsultation(props.match.params.id)
+    getConsultation(props.match.params.consultationId)
       .then(consultation => setForm(consultation))
-  }, [props.match.params.id])
+  }, [props.match.params.consultationId])
 
 
   const handleChange = (e => {
@@ -44,7 +44,7 @@ const ConsultationForm = props => {
 
   return (
     <>
-      {back && <Redirect to="/consultas" />}
+      {back && <Redirect to={`/clientes/${form.pet.customerId}`} />}
       <div className="container">
         <div className="row">
           <div className="container col-8">
@@ -55,7 +55,7 @@ const ConsultationForm = props => {
                   <div className="form-group">
                     <label htmlFor="date">Fecha consulta</label>
                     <input
-                      type="text"
+                      type="date"
                       className="form-control"
                       id="date"
                       onChange={e => handleChange(e)}
@@ -64,6 +64,21 @@ const ConsultationForm = props => {
                     />
                   </div>
                 </div>
+                <div className="col">
+                  <div className="form-group">
+                    <label htmlFor="nextConsultation">Proxima consulta</label>
+                    <input
+                      type="date"
+                      className="form-control"
+                      id="nextConsultation"
+                      onChange={e => handleChange(e)}
+                      value={form.nextConsultation}
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="form-row">
                 <div className="col">
                   <div className="form-group">
                     <label htmlFor="diagnosis">Diagnostico</label>
@@ -82,26 +97,13 @@ const ConsultationForm = props => {
                 <div className="col">
                   <div className="form-group">
                     <label htmlFor="treatment">Tratamiento</label>
-                    <input
-                      type="text"
+                    <textarea
                       className="form-control"
                       id="treatment"
                       onChange={e => handleChange(e)}
                       value={form.treatment}
                       required
-                    />
-                  </div>
-                </div>
-                <div className="col">
-                  <div className="form-group">
-                    <label htmlFor="nextConsultation">Proxima consulta</label>
-                    <input
-                      type="nextConsultation"
-                      className="form-control"
-                      id="nextConsultation"
-                      onChange={e => handleChange(e)}
-                      value={form.nextConsultation}
-                      required
+                      rows="6"
                     />
                   </div>
                 </div>
@@ -113,6 +115,7 @@ const ConsultationForm = props => {
                   id="observations"
                   onChange={e => handleChange(e)}
                   value={form.observations}
+                  rows="1"
                 />
               </div>
 
