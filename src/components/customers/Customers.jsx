@@ -7,10 +7,9 @@ import { getCustomers, deleteCustomer } from '../../services/customers'
 const Customers = ({ filter }) => {
 
   const [customers, setCustomers] = useState({ rows: [] })
-  const [addCustomer, setAddCustomer] = useState(false)
-  const [editCustomer, setEditCustomer] = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
   const [selected, setSelected] = useState({})
+  const [redirect, setRedirect] = useState('')
 
   useEffect(() => {
     getCustomers(filter)
@@ -20,9 +19,11 @@ const Customers = ({ filter }) => {
   const confirmDelete = () => {
     deleteCustomer(selected)
       .then(() => getCustomers(filter)
-        .then(customers => setCustomers(customers))
+        .then(customers => {
+          setCustomers(customers)
+          setShowConfirm(false)
+        })
       )
-    setShowConfirm(false)
   }
 
   const handleDelete = customer => {
@@ -30,13 +31,16 @@ const Customers = ({ filter }) => {
     setShowConfirm(true)
   }
 
-  const cancelDelete = () => {
-    setSelected({})
-    setShowConfirm(false)
+  const handleEdit = customer => {
+    setRedirect(`/edit-cliente/${customer.id}`)
   }
 
-  const handleEdit = customer => {
-    setEditCustomer(`./edit-cliente/${customer.id}`)
+  const handleAdd = () => {
+    setRedirect('/nuevo-cliente')
+  }
+
+  const handleRestore = () => {
+    setRedirect('/restaurar/clientes')
   }
 
   const { rows } = customers
@@ -46,27 +50,29 @@ const Customers = ({ filter }) => {
       {showConfirm &&
         <Confirm
           title="Eliminando cliente"
-          question="Seguro quiere borrar este registro?"
-          okButton="SI"
-          cancelButton="NO"
-          confirmDelete={confirmDelete}
-          cancelDelete={cancelDelete}
+          question={`Desea eliminar cliente ${selected.name}?`}
+          okButton="Eliminar"
+          cancelButton="Cancelar"
+          cancelDelete={() => setShowConfirm(false)}
+          confirmDelete={() => confirmDelete()}
         />
       }
-      {editCustomer && <Redirect to={editCustomer} />}
-      {addCustomer && <Redirect to="./nuevo-cliente" />}
+      {redirect && <Redirect to={redirect} />}
       <div className="container-fluid">
         <table className="table">
           <thead>
             <tr>
               <th scope="col">#</th>
               <th scope="col">Nombre</th>
-              <th scope="col">Dirección</th>
+              <th scope="col">Domicilio</th>
               <th scope="col">Teléfono</th>
               <th scope="col">Email</th>
               <th scope="col">Observaciones</th>
               <th scope="col" colSpan="2">
-                <button className="btn btn-primary my-1 float-right" onClick={() => setAddCustomer(true)}>Agregar</button>
+                <button
+                  className="btn btn-primary my-1 float-right"
+                  onClick={() => handleAdd()}
+                >Agregar</button>
               </th>
             </tr>
           </thead>
@@ -82,6 +88,14 @@ const Customers = ({ filter }) => {
             )}
           </tbody>
         </table>
+        <div className="float-right">
+          <button
+            className="btn btn-warning"
+            onClick={() => handleRestore()}
+          >
+            Restaurar
+          </button>
+        </div>
       </div>
     </>
   )

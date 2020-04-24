@@ -7,9 +7,9 @@ import { getConsultations, deleteConsultation } from '../../services/consultatio
 const Consultations = ({ filter }) => {
 
   const [consultations, setConsultations] = useState({ rows: [] })
-  const [editConsultation, setEditConsultation] = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
   const [selected, setSelected] = useState({})
+  const [redirect, setRedirect] = useState('')
 
   useEffect(() => {
     getConsultations(filter)
@@ -24,36 +24,36 @@ const Consultations = ({ filter }) => {
   const confirmDelete = () => {
     deleteConsultation(selected)
       .then(() => getConsultations(filter)
-        .then(consultations => setConsultations(consultations))
+        .then(consultations => {
+          setConsultations(consultations)
+          setShowConfirm(false)
+        })
       )
-    setShowConfirm(false)
-  }
-
-  const cancelDelete = () => {
-    setSelected({})
-    setShowConfirm(false)
   }
 
   const handleEdit = Consultation => {
-    setEditConsultation(`./edit-consulta/${Consultation.id}`)
+    setRedirect(`./edit-consulta/${Consultation.id}`)
+  }
+
+  const handleRestore = () => {
+    setRedirect('/restaurar/consultas')
   }
 
   const { rows } = consultations
 
   return (
     <>
-          {showConfirm &&
+      {showConfirm &&
         <Confirm
-          title="Eliminando cliente"
-          question="Seguro quiere borrar este registro?"
-          okButton="SI"
-          cancelButton="NO"
-          confirmDelete={confirmDelete}
-          cancelDelete={cancelDelete}
+          title="Eliminando consulta"
+          question={`Desea eliminar consulta del ${selected.date} del paciente ${selected.pet.name}?`}
+          okButton="Eliminar"
+          cancelButton="Cancelar"
+          cancelDelete={() => setShowConfirm(false)}
+          confirmDelete={() => confirmDelete()}
         />
       }
-
-      {editConsultation && <Redirect to={editConsultation} />}
+      {redirect && <Redirect to={redirect} />}
       <div className="container-fluid">
         <table className="table">
           <thead>
@@ -80,6 +80,15 @@ const Consultations = ({ filter }) => {
             )}
           </tbody>
         </table>
+        <div className="float-right">
+          <button
+            className="btn btn-warning"
+            onClick={() => handleRestore()}
+          >
+            Restaurar
+          </button>
+        </div>
+
       </div>
     </>
   )

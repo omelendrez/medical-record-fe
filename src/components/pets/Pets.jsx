@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { Redirect } from 'react-router-dom'
 import Pet from './Pet'
+import Confirm from '../Confirm'
 import { getPets, deletePet } from '../../services/pets'
 
 const Pets = ({ filter }) => {
 
   const [pets, setPets] = useState({ rows: [] })
-  const [editPet, setEditPet] = useState(false)
+  const [showConfirm, setShowConfirm] = useState(false)
+  const [selected, setSelected] = useState({})
+  const [redirect, setRedirect] = useState('')
 
   useEffect(() => {
     getPets(filter)
@@ -14,21 +17,43 @@ const Pets = ({ filter }) => {
   }, [filter])
 
   const handleDelete = pet => {
-    deletePet(pet)
+    setSelected(pet)
+    setShowConfirm(true)
+  }
+
+  const confirmDelete = () => {
+    deletePet(selected)
       .then(() => getPets(filter)
-        .then(pets => setPets(pets))
+        .then(pets => {
+          setPets(pets)
+          setShowConfirm(false)
+        })
       )
   }
 
   const handleEdit = pet => {
-    setEditPet(`./edit-paciente/${pet.id}`)
+    setRedirect(`./edit-paciente/${pet.id}`)
+  }
+
+  const handleRestore = () => {
+    setRedirect('/restaurar/pacientes')
   }
 
   const { rows } = pets
 
   return (
     <>
-      {editPet && <Redirect to={editPet} />}
+      {showConfirm &&
+        <Confirm
+          title="Eliminando paciente"
+          question={`Desea eliminar paciente ${selected.name}?`}
+          okButton="Eliminar"
+          cancelButton="Cancelar"
+          cancelDelete={() => setShowConfirm(false)}
+          confirmDelete={() => confirmDelete()}
+        />
+      }
+      {redirect && <Redirect to={redirect} />}
       <div className="container-fluid">
         <table className="table">
           <thead>
@@ -55,6 +80,15 @@ const Pets = ({ filter }) => {
             )}
           </tbody>
         </table>
+        <div className="float-right">
+          <button
+            className="btn btn-warning"
+            onClick={() => handleRestore()}
+          >
+            Restaurar
+          </button>
+        </div>
+
       </div>
     </>
   )
