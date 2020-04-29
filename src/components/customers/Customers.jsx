@@ -8,9 +8,9 @@ import { getCustomers, deleteCustomer } from '../../services/customers'
 const Customers = ({ filter }) => {
 
   const paginationDefault = {
-    curPage: 2,
+    curPage: 1,
     totRecords: 0,
-    limit: 1,
+    limit: 5,
     filter
   }
 
@@ -21,14 +21,6 @@ const Customers = ({ filter }) => {
   const [pagination, setPagination] = useState(paginationDefault)
 
   useEffect(() => {
-    updateState()
-  }, [pagination])
-
-  const changePage = page => {
-    setPagination({ ...pagination, curPage: page })
-  }
-
-  const updateState = () => {
     const pag = pagination
     getCustomers(pagination)
       .then(customers => {
@@ -36,6 +28,10 @@ const Customers = ({ filter }) => {
         setPagination(pag)
         setCustomers(customers)
       })
+  }, [pagination])
+
+  const changePage = page => {
+    setPagination({ ...pagination, curPage: page })
   }
 
   const confirmDelete = () => {
@@ -66,6 +62,7 @@ const Customers = ({ filter }) => {
   }
 
   const { rows } = customers
+  const totPages = Math.round(pagination.totRecords / pagination.limit)
 
   return (
     <>
@@ -110,7 +107,7 @@ const Customers = ({ filter }) => {
             )}
           </tbody>
         </table>
-        {pagination.totRecords && <Pagination pagination={pagination} changePage={changePage} />}
+        {totPages > 1 && <Pagination pagination={pagination} changePage={changePage} />}
         <div className="float-right">
           <button
             className="btn btn-warning"

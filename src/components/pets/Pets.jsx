@@ -22,14 +22,6 @@ const Pets = ({ filter }) => {
 
 
   useEffect(() => {
-    updateState()
-  }, [pagination])
-
-  const changePage = page => {
-    setPagination({ ...pagination, curPage: page })
-  }
-
-  const updateState = () => {
     const pag = pagination
     getPets(pagination)
       .then(pets => {
@@ -37,6 +29,10 @@ const Pets = ({ filter }) => {
         setPagination(pag)
         setPets(pets)
       })
+  }, [pagination])
+
+  const changePage = page => {
+    setPagination({ ...pagination, curPage: page })
   }
 
   const handleDelete = pet => {
@@ -63,6 +59,7 @@ const Pets = ({ filter }) => {
   }
 
   const { rows } = pets
+  const totPages = Math.round(pagination.totRecords / pagination.limit)
 
   return (
     <>
@@ -101,7 +98,7 @@ const Pets = ({ filter }) => {
             )}
           </tbody>
         </table>
-        {pagination.totRecords && <Pagination pagination={pagination} changePage={changePage} />}
+        {totPages > 1 && <Pagination pagination={pagination} changePage={changePage} />}
         <div className="float-right">
           <button
             className="btn btn-warning"

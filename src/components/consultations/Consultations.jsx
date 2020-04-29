@@ -21,14 +21,6 @@ const Consultations = ({ filter }) => {
   const [pagination, setPagination] = useState(paginationDefault)
 
   useEffect(() => {
-    updateState()
-  }, [pagination])
-
-  const changePage = page => {
-    setPagination({ ...pagination, curPage: page })
-  }
-
-  const updateState = () => {
     const pag = pagination
     getConsultations(pagination)
       .then(consultations => {
@@ -36,7 +28,10 @@ const Consultations = ({ filter }) => {
         setPagination(pag)
         setConsultations(consultations)
       })
+  }, [pagination])
 
+  const changePage = page => {
+    setPagination({ ...pagination, curPage: page })
   }
 
   const handleDelete = consultation => {
@@ -63,6 +58,7 @@ const Consultations = ({ filter }) => {
   }
 
   const { rows } = consultations
+  const totPages = Math.round(pagination.totRecords / pagination.limit)
 
   return (
     <>
@@ -103,7 +99,7 @@ const Consultations = ({ filter }) => {
             )}
           </tbody>
         </table>
-        {pagination.totRecords && <Pagination pagination={pagination} changePage={changePage} />}
+        {totPages > 1 && <Pagination pagination={pagination} changePage={changePage} />}
         <div className="float-right">
           <button
             className="btn btn-warning"
