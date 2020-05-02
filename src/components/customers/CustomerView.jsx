@@ -4,13 +4,35 @@ import Confirm from '../Confirm'
 import { getCustomer } from '../../services/customers'
 import { getPet } from '../../services/pets'
 import { deleteConsultation } from '../../services/consultations'
+import { formatNumber } from '../../services/utils'
 import './CustomerView.css'
 
+const Amount = ({ text, value }) => {
+  return <div className="amount-row">
+    <div className="amount-label">{text}</div>
+    <div className="amount">{value}</div>
+  </div>
+}
+
+const Balance = ({ amount, paid }) => {
+  const amounts = [
+    { text: 'Consulta', value: formatNumber(amount) },
+    { text: 'Pagado', value: formatNumber(paid) },
+    { text: 'Saldo', value: formatNumber(amount - paid) }]
+
+  return (
+    <div className="float-right text-right balance">
+      {amounts.map(amount => <Amount text={amount.text} value={amount.value} />)}
+    </div>
+  )
+}
+
 const Consultation = ({ consultation, editConsultation, deleteConsultation }) => {
-  const { id, date, diagnosis, treatment, nextConsultation, observations } = consultation
+  const { id, date, diagnosis, treatment, nextConsultation, observations, amount, paid } = consultation
   return (
     <div className="card consultation">
       <div className="card-body">
+        <Balance amount={amount} paid={paid} />
         <h5 className="card-title">{date}</h5>
         <h6 className="card-subtitle mb-2">Diagnóstico: {diagnosis}</h6>
         <p className="card-text">{treatment}</p>
@@ -40,7 +62,7 @@ const Consultations = ({ consultations, addConsultation, editConsultation, delet
       <div className="text-right">
         <button
           type="button"
-          className="btn btn-primary m-1"
+          className="btn btn-primary m-1 add-consultation"
           onClick={e => addConsultation(e)}
         >Agregar</button>
       </div>
@@ -57,75 +79,83 @@ const Consultations = ({ consultations, addConsultation, editConsultation, delet
 }
 
 const Pet = ({ pet }) => {
-  const { name, type, breed, observations } = pet
+  const { name, type, breed, observations, statusId } = pet
   return (
-    <div>
-      <div>
+    <div className="card pet">
+      <div className="card-body">
         <h5 className="card-title">{name}</h5>
+        <h6 className="card-subtitle mb-2 text-muted">{type}</h6>
+        <h6 className="card-subtitle mb-2 text-muted">{breed}</h6>
+        <p className="card-text observations">{observations}</p>
+        <p className={`status ${statusId === 1 ? 'active' : 'inactive'}`}>{statusId === 1 ? 'Activo' : 'Inactivo'}</p>
       </div>
-      <div>{type}</div>
-      <div>{breed}</div>
-      <div>{observations}</div>
     </div>
+  )
+}
+
+const PetsList = ({ pet, pets, loadPet, handleAddPet }) => {
+
+  return (
+    !pet.name &&
+    <div className="pets mt-2">
+      <div className="pets-header">
+        Pacientes
+      </div>
+      <ul className="list-group">
+        {
+          pets.map((pet, index) => {
+            return (
+              <li
+                className="list-group-item"
+                key={index}
+                onClick={() => loadPet(pet)}
+              >
+                <button className="btn btn-info btn-block">
+                  {`${pet.name} (${pet.statusId === 1 ? 'activo' : 'inactivo'})`}
+                </button>
+              </li>
+            )
+          })
+        }
+      </ul>
+      {
+        !pets.length && <div className="alert alert-warning my-3">No tiene mascotas</div>
+      }
+      <div>
+        <button
+          type="button"
+          className="btn btn-primary mt-4 float-right"
+          onClick={e => handleAddPet(e)}
+        >Agregar</button>
+      </div>
+
+    </div >
+
   )
 }
 
 const Customer = ({ customer, pet, handleAddPet, loadPet, setBack }) => {
   const { name, address, phone, observations, pets } = customer
   return (
-    <div className="card customer">
-      <div className="card-body">
-        <h5 className="card-title">{name}</h5>
-        <h6 className="card-subtitle mb-2 text-muted">{address}</h6>
-        <h6 className="card-subtitle mb-2 text-muted">{phone}</h6>
-
-        <p className="card-text observations">{observations}</p>
-
-        {!pet.name && <div className="pets">
-          <div className="pets-header">
-            Pacientes
-        </div>
-          <ul className="list-group">
-            {
-              pets.map((pet, index) => {
-                return (
-                  <li
-                    className="list-group-item"
-                    key={index}
-                    onClick={() => loadPet(pet)}
-                  >
-                    {pet.name}
-                  </li>
-                )
-              })
-            }
-          </ul>
-
-
-          <div>
-            <button
-              type="button"
-              className="btn btn-primary mt-4"
-              onClick={e => handleAddPet(e)}
-            >Agregar</button>
+    <>
+      <div className="text-center">
+        <div className="card customer">
+          <div className="card-body">
+            <h5 className="card-title">{name}</h5>
+            <h6 className="card-subtitle mb-2 text-muted">{address}</h6>
+            <h6 className="card-subtitle mb-2 text-muted">{phone}</h6>
+            <p className="card-text observations">{observations}</p>
           </div>
         </div>
-        }
         {pet.name && <Pet pet={pet} />}
-        {
-          !customer.pets.length && <div className="alert alert-warning my-3">No tiene mascotas</div>
-        }
-
-      </div>
-      <div className="container-fluid my-4">
         <button
           type="button"
-          className="btn btn-warning float-right"
+          className="btn btn-warning mt-3"
           onClick={() => setBack(true)}
         >Volver</button>
       </div>
-    </div>
-
+      <PetsList pet={pet} pets={pets} loadPet={loadPet} handleAddPet={handleAddPet} />
+    </>
   )
 }
 
@@ -137,7 +167,12 @@ const CustomerView = props => {
   const [showConfirm, setShowConfirm] = useState(false)
 
   const setBack = () => {
-    props.history.goBack()
+    setPet({})
+    if (!props.match.params.petId) {
+      setRedirect(`/clientes`)
+    } else {
+      setRedirect(`/clientes/${customer.id}`)
+    }
   }
 
   const loadPet = pet => {
@@ -199,7 +234,7 @@ const CustomerView = props => {
         />
       }
       {redirect && <Redirect to={redirect} />}
-      <div className="main-container container-fluid">
+      <div className="main-container">
         <Customer
           customer={customer}
           pet={pet}
