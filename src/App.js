@@ -6,6 +6,7 @@ import Customers from './components/customers/Customers'
 import CustomerAdd from './components/customers/CustomerAdd'
 import CustomerEdit from './components/customers/CustomerEdit'
 import CustomerView from './components/customers/CustomerView'
+import Debtors from './components/customers/Debtors'
 import Pets from './components/pets/Pets'
 import PetAdd from './components/pets/PetAdd'
 import PetEdit from './components/pets/PetEdit'
@@ -35,6 +36,7 @@ function App() {
           <Route path="/edit-consulta/:consultationId" exact component={ConsultationEdit} />
           <Route path="/nueva-consulta/:customerId/:petId" exact component={ConsultationAdd} />
           <Route path="/restaurar/:table" exact component={Restore} />
+          <Route path="/deudores" exact component={() => <Debtors filter={filter} />} />
         </Switch>
       </main>
     </BrowserRouter>

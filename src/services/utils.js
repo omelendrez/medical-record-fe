@@ -41,30 +41,18 @@ export const fieldsDefault = {
 }
 
 export const paymentMethods = [
-  {
-    id: 0,
-    name: 'N/A'
-  },
-  {
-    id: 1,
-    name: 'Efectivo'
-  },
-  {
-    id: 2,
-    name: 'Tarjeta Débito'
-  },
-  {
-    id: 3,
-    name: 'Tarjeta Crédito'
-  },
-  {
-    id: 4,
-    name: 'Mercado Pago'
-  },
-  {
-    id: 5,
-    name: 'Otro'
-  }
+  { id: 0, name: 'N/A' },
+  { id: 1, name: 'Efectivo' },
+  { id: 2, name: 'Tarjeta Débito' },
+  { id: 3, name: 'Tarjeta Crédito' },
+  { id: 4, name: 'Mercado Pago' },
+  { id: 5, name: 'Otro' }
+]
+
+export const sexList = [
+  { id: '', name: '' },
+  { id: 'M', name: 'Macho' },
+  { id: 'H', name: 'Hembra' }
 ]
 
 export const formatNumber = amount => parseInt(amount).toFixed(2)

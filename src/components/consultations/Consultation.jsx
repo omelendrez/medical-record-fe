@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 const Consultation = ({ data, deleteConsultation, editConsultation }) => {
 
-  const { date, diagnosis, treatment, nextConsultation, petId, pet } = data
+  const { date, diagnosis, treatment, nextConsultation, petId, customerId, pet } = data
 
   return (
     <tr>
@@ -11,20 +11,20 @@ const Consultation = ({ data, deleteConsultation, editConsultation }) => {
         {date}
       </td>
       <td>
-        <Link to={`/clientes/${pet.customer.id}/${petId}`}>
+        <Link to={`/clientes/${customerId}/${petId}`}>
           {pet.name}
         </Link>
       </td>
-      <td>{diagnosis}</td>
-      <td>{treatment}</td>
+      <td>{diagnosis.substring(0, 30)}</td>
+      <td>{treatment.substring(0, 60)}</td>
       <td className="text-nowrap">{nextConsultation}</td>
-      <td>
+      <td style={{ width: '120px' }}>
         <button
           className="btn btn-danger"
           onClick={() => deleteConsultation(data)}
         >Eliminar</button>
       </td>
-      <td>
+      <td style={{ width: '120px' }}>
         <button
           className="btn btn-info"
           onClick={() => editConsultation(data)}

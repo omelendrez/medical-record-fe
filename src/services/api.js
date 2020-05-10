@@ -5,5 +5,5 @@ export default axios.create({
     'Accept': 'application/json',
     'Content-Type': 'application/json'
   },
-  baseURL: 'https://vmr.herokuapp.com/api'
+  baseURL: process.env.REACT_APP_BACKEND_URL
 })

@@ -10,7 +10,7 @@ const Consultations = ({ filter }) => {
   const paginationDefault = {
     curPage: 1,
     totRecords: 0,
-    limit: 3,
+    limit: 10,
     filter
   }
 
@@ -78,14 +78,14 @@ const Consultations = ({ filter }) => {
       }
       {redirect && <Redirect to={redirect} />}
       <div className="container-fluid">
-        <table className="table">
+        <table className="table table-sm">
           <thead>
             <tr>
               <th scope="col">Fecha</th>
               <th scope="col">Paciente</th>
               <th scope="col">Diagnostico</th>
               <th scope="col">Tratamiento</th>
-              <th scope="col">Próx. Turno</th>
+              <th scope="col" className="text-nowrap">Próx. Turno</th>
               <th scope="col" colSpan="2">
               </th>
             </tr>

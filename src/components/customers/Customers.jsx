@@ -10,7 +10,7 @@ const Customers = ({ filter }) => {
   const paginationDefault = {
     curPage: 1,
     totRecords: 0,
-    limit: 5,
+    limit: 10,
     filter
   }
 
@@ -82,14 +82,13 @@ const Customers = ({ filter }) => {
       }
       {redirect && <Redirect to={redirect} />}
       <div className="container-fluid">
-        <table className="table">
+        <table className="table table-sm">
           <thead>
             <tr>
-              <th scope="col">#</th>
-              <th scope="col">Nombre</th>
-              <th scope="col">Domicilio</th>
+              <th scope="col" style={{ width: '200px' }}>Nombre</th>
+              <th scope="col" style={{ width: '200px' }}>Paciente</th>
+              <th scope="col" style={{ width: '300px' }}>Domicilio</th>
               <th scope="col">Teléfono</th>
-              <th scope="col">Email</th>
               <th scope="col">Observaciones</th>
               <th scope="col" colSpan="2">
                 <button

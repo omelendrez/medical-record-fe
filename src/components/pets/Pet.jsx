@@ -3,24 +3,24 @@ import { Link } from 'react-router-dom'
 
 const Pet = ({ data, deletePet, editPet }) => {
 
-  const { id, name, type, breed, observations, customerId } = data
+  const { id, name, type, breed, sex, observations, customerId } = data
 
   return (
     <tr>
-      <td>{id}</td>
       <td className="name">
         <Link to={`/clientes/${customerId}/${id}`}>{name}</Link>
       </td>
       <td>{type}</td>
       <td>{breed}</td>
+      <td>{sex}</td>
       <td>{observations}</td>
-      <td>
+      <td style={{width: '120px'}}>
         <button
           className="btn btn-danger"
           onClick={() => deletePet(data)}
         >Eliminar</button>
       </td>
-      <td>
+      <td style={{width: '120px'}}>
         <button
           className="btn btn-info"
           onClick={() => editPet(data)}

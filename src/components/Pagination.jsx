@@ -12,7 +12,7 @@ const Pagination = ({ pagination, changePage }) => {
   }
 
   return (
-    <nav aria-label="...">
+    <nav aria-label="..." className="float-left">
       <ul className="pagination">
         <li className={`page-item ${canGoBackward ? '' : 'disabled'}`}>
           <button className="page-link" onClick={() => handleChangePage(1)}>
@@ -24,9 +24,9 @@ const Pagination = ({ pagination, changePage }) => {
             {'<'}
           </button>
         </li>
-        <li className="page-item active">
+        <li className="page-item disabled">
           <button className="page-link" >
-            {curPage}
+            {`Página ${curPage} de ${totPages}`}
           </button>
         </li>
         <li className={`page-item ${canGoForward ? '' : 'disabled'}`}>
@@ -39,8 +39,11 @@ const Pagination = ({ pagination, changePage }) => {
             {'>>'}
           </button>
         </li>
-      </ul>
-    </nav>
+        <div className="m-1 ml-3">
+          <p className="text-secondary">{`${totRecords} registros`}</p>
+        </div>
+      </ul >
+    </nav >
   )
 }
 

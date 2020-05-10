@@ -4,7 +4,7 @@ import NavLink from './NavLink'
 
 const Navbar = ({ doSearch }) => {
   const { pathname: page } = useLocation()
-  const hasSearch = page === '/clientes' || page === '/pacientes' || page === '/consultas'
+  const hasSearch = page === '/clientes' || page === '/pacientes' || page === '/consultas' || page === '/deudores'
 
   const [search, setSearch] = useState('')
 
@@ -25,6 +25,7 @@ const Navbar = ({ doSearch }) => {
           <NavLink to="/clientes">Clientes</NavLink>
           <NavLink to="/pacientes">Pacientes</NavLink>
           <NavLink to="/consultas">Consultas</NavLink>
+          <NavLink to="/deudores">Deudores</NavLink>
         </ul>
         {
           hasSearch &&

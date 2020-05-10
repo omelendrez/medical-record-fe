@@ -8,7 +8,7 @@ import { formatNumber } from '../../services/utils'
 import './CustomerView.css'
 
 const Amount = ({ text, value }) => {
-  return <div className="amount-row">
+  return <div className="amount-row mx-4">
     <div className="amount-label">{text}</div>
     <div className="amount">{value}</div>
   </div>
@@ -21,8 +21,8 @@ const Balance = ({ amount, paid }) => {
     { text: 'Saldo', value: formatNumber(amount - paid) }]
 
   return (
-    <div className="float-right text-right balance">
-      {amounts.map(amount => <Amount text={amount.text} value={amount.value} />)}
+    <div className={`float-right text-right balance ${amount > paid ? 'debt' : ''}`}>
+      {amounts.map((amount, index) => <Amount key={index} text={amount.text} value={amount.value} />)}
     </div>
   )
 }
@@ -32,12 +32,12 @@ const Consultation = ({ consultation, editConsultation, deleteConsultation }) =>
   return (
     <div className="card consultation">
       <div className="card-body">
-        <Balance amount={amount} paid={paid} />
-        <h5 className="card-title">{date}</h5>
-        <h6 className="card-subtitle mb-2">Diagnóstico: {diagnosis}</h6>
-        <p className="card-text">{treatment}</p>
+        {amount > 0 && <Balance amount={amount} paid={paid} />}
+        <h6 className="card-title">{date}</h6>
+        {diagnosis && <h5 className="card-subtitle mb-2">Diagnóstico: {diagnosis}</h5>}
+        {treatment && <p className="card-text texts">Tratamiento: {treatment}</p>}
         {nextConsultation && <h6 className="card-subtitle mb-2">Próxima consulta: {nextConsultation}</h6>}
-        {observations && <p className="card-text">{observations}</p>}
+        {observations && <p className="card-text observations">{observations}</p>}
         <div>
           <button
             type="button"
@@ -64,9 +64,13 @@ const Consultations = ({ consultations, addConsultation, editConsultation, delet
           type="button"
           className="btn btn-primary m-1 add-consultation"
           onClick={e => addConsultation(e)}
-        >Agregar</button>
+        >Agregar Consulta</button>
       </div>
-      <div className="consultations-list overflow-auto">
+      {!consultations.length && <div className="container text-center">
+        <div className="alert alert-warning">El paciente no registra consultas</div>
+      </div>
+      }
+      {consultations.length > 0 && <div className="consultations-list overflow-auto">
         {consultations.map((consultation, index) => <Consultation
           key={index}
           consultation={consultation}
@@ -74,18 +78,22 @@ const Consultations = ({ consultations, addConsultation, editConsultation, delet
           deleteConsultation={deleteConsultation}
         />)}
       </div>
+      }
     </div>
   )
 }
 
 const Pet = ({ pet }) => {
-  const { name, type, breed, observations, statusId } = pet
+  const { name, type, breed, sex, weight, yearBorn, observations, statusId } = pet
   return (
     <div className="card pet">
       <div className="card-body">
         <h5 className="card-title">{name}</h5>
         <h6 className="card-subtitle mb-2 text-muted">{type}</h6>
         <h6 className="card-subtitle mb-2 text-muted">{breed}</h6>
+        <h6 className="card-subtitle mb-2 text-muted">{sex}</h6>
+        <h6 className="card-subtitle mb-2 text-muted">{weight}</h6>
+        <h6 className="card-subtitle mb-2 text-muted">{yearBorn}</h6>
         <p className="card-text observations">{observations}</p>
         <p className={`status ${statusId === 1 ? 'active' : 'inactive'}`}>{statusId === 1 ? 'Activo' : 'Inactivo'}</p>
       </div>
@@ -110,7 +118,7 @@ const PetsList = ({ pet, pets, loadPet, handleAddPet }) => {
                 key={index}
                 onClick={() => loadPet(pet)}
               >
-                <button className="btn btn-info btn-block">
+                <button className={`btn btn-${pet.statusId === 1 ? 'info' : 'danger'} btn-block`}>
                   {`${pet.name} (${pet.statusId === 1 ? 'activo' : 'inactivo'})`}
                 </button>
               </li>

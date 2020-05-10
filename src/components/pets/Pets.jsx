@@ -78,13 +78,13 @@ const Pets = ({ filter }) => {
       }
       {redirect && <Redirect to={redirect} />}
       <div className="container-fluid">
-        <table className="table">
+        <table className="table table-sm">
           <thead>
             <tr>
-              <th scope="col">#</th>
               <th scope="col">Nombre</th>
               <th scope="col">Tipo</th>
               <th scope="col">Raza</th>
+              <th scope="col">Sexo</th>
               <th scope="col">Observaciones</th>
               <th scope="col" colSpan="2"> </th>
             </tr>
