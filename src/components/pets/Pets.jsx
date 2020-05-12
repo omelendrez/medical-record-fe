@@ -68,6 +68,8 @@ const Pets = () => {
 
   const handleChange = e => {
     setFilter(e.target.value)
+    if (!e.target.value) setPagination({ ...pagination, filter: '' })
+
   }
 
   const handleClick = (e) => {
@@ -127,6 +129,7 @@ const Pets = () => {
                 type="search"
                 aria-label="Search"
                 onChange={e => handleChange(e)}
+                value={filter}
               />
               <button
                 className="btn btn-warning"
