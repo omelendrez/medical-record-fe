@@ -5,7 +5,6 @@ import { getInactiveConsultations, restoreConsultation } from '../services/consu
 export const fieldsDefault = {
   clientes: {
     fields: [
-      { name: 'id', title: '#' },
       { name: 'name', title: 'Nombre' },
       { name: 'address', title: 'Domicilio' },
       { name: 'phone', title: 'Teléfono' },
@@ -17,7 +16,6 @@ export const fieldsDefault = {
   },
   pacientes: {
     fields: [
-      { name: 'id', title: '#' },
       { name: 'name', title: 'Nombre' },
       { name: 'type', title: 'Tipo' },
       { name: 'breed', title: 'Raza' },
@@ -28,9 +26,8 @@ export const fieldsDefault = {
   },
   consultas: {
     fields: [
-      { name: 'id', title: '#' },
       { name: 'date', title: 'Fecha', className: "text-nowrap" },
-      { name: 'pet.name', title: 'Paciente' },
+      { name: 'petName', title: 'Paciente' },
       { name: 'diagnosis', title: 'Diagnóstico' },
       { name: 'treatment', title: 'Tratamiento' },
       { name: 'nextConsultation', title: 'Próx. Turno', className: "text-nowrap" }
@@ -55,4 +52,4 @@ export const sexList = [
   { id: 'H', name: 'Hembra' }
 ]
 
-export const formatNumber = amount => parseInt(amount).toFixed(2)
+export const formatNumber = amount => parseFloat(amount).toFixed(2)

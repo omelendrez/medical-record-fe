@@ -9,11 +9,9 @@ const Pet = ({ data, deletePet, editPet }) => {
   return (
     <tr>
       <td className="name">
-        <Link to={`/clientes/${customerId}/${id}`}>{name}</Link>
+        <Link to={{ pathname: `/clientes/${customerId}/${id}`, state: { from: '/pacientes' } }}>{name}</Link>
       </td>
-      <td>
-        <Link className="customer-row" to={`/clientes/${customerId}`}>{customerName}</Link>
-      </td>
+      <td className="customer-row">{customerName}</td>
       <td>{type}</td>
       <td>{breed}</td>
       <td>{sex}</td>
