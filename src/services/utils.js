@@ -70,6 +70,20 @@ export const paymentMethods = [
   { id: 5, name: 'Otro' }
 ]
 
+export const vaccines = [
+  { id: 0, name: 'N/A' },
+  { id: 1, name: 'Triple felina' },
+  { id: 2, name: 'Quíntuple' },
+  { id: 3, name: 'Séxtuple' },
+  { id: 4, name: 'Puppy DP' },
+  { id: 5, name: 'Antirrábica' }
+]
+export const treatmentStage = [
+  { id: 1, name: 'Inicio' },
+  { id: 2, name: 'Continuación' },
+  { id: 3, name: 'Fin / Alta' }
+]
+
 export const sexList = [
   { id: '', name: '' },
   { id: 'Hc', name: 'Hembra c' },
