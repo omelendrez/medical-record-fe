@@ -70,8 +70,7 @@ export const paymentMethods = [
   { id: 5, name: 'Otro' }
 ]
 
-export const vaccines = [
-  { id: 0, name: 'N/A' },
+export const vaccinesList = [
   { id: 1, name: 'Triple felina' },
   { id: 2, name: 'Quíntuple' },
   { id: 3, name: 'Séxtuple' },
@@ -103,7 +102,25 @@ export const getDateFromDays = days => {
   }
   let d = new Date();
   d.setDate(d.getDate() - days)
-  return moment(d).format('YYY-MM-DD');
+  return moment(d).format('YYYY-MM-DD');
+}
+
+export const getApointmentFromDays = days => {
+  if (days < 1) {
+    return ''
+  }
+  let d = new Date();
+  d.setDate(d.getDate() + parseInt(days))
+  return moment(d).format('YYYY-MM-DD');
+}
+
+export const getDateFromMonths = months => {
+  if (months < 1) {
+    return ''
+  }
+  let d = new Date();
+  d.setMonth(d.getMonth() - months)
+  return moment(d).format('YYYY-MM-DD');
 }
 
 export const formatNumber = amount => parseFloat(amount).toFixed(2)
