@@ -8,10 +8,10 @@ const Consultation = ({ consultation, editConsultation, deleteConsultation }) =>
   return (
     <div className="card consultation pb-2">
       <div className="card-body">
-        <div className="float-right text-capitalize small">
+        <p className="float-right text-capitalize small">
           <div>{userName || ''}</div>
           <div>{formatDateFull(updatedAt)}</div>
-        </div>
+        </p>
         {!readOnly() && amount > 0 && <Balance amount={amount} paid={paid} />}
         <h6 className="card-title">{formatDate(date)}</h6>
         {anamnesis && <p className="card-text"><b>Anamnesis</b>: {anamnesis}</p>}

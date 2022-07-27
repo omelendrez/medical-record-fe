@@ -22,7 +22,9 @@ const Customer = ({ customer, pet, handleAddPet, loadPet, setBack, debt }) => {
           </div>
         </div>
         {pet.name &&
-          <Pet pet={pet} />
+          <>
+            <Pet pet={pet} />
+          </>
         }
 
         <div className="container mt-3 button-container">

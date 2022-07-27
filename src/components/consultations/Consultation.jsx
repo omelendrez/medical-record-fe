@@ -28,8 +28,9 @@ const Consultation = ({ data, deleteConsultation, editConsultation }) => {
         actionEdit={editConsultation}
         data={data}
       />
+
     </tr>
   )
 }
 
-export default React.memo(Consultation)
+export default Consultation
