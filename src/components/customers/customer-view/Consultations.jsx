@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Redirect } from 'react-router-dom'
 import Consultation from './Consultation'
 import Confirm from '../../Confirm'
+import PDFGenerator from './PDFGenerator'
 import { getConsultationsByPet, deleteConsultation } from '../../../services/consultations'
 import { getVaccinationsByPet, deleteVaccination } from '../../../services/vaccinations'
 import { getDewormingsByPet, deleteDeworming } from '../../../services/dewormings'
@@ -11,30 +12,35 @@ const Consultations = ({ pet, current }) => {
 	const [redirect, setRedirect] = useState('')
 	const [selected, setSelected] = useState({})
 	const [showConfirm, setShowConfirm] = useState(false)
-	const [consultations, setConsultations] = useState({ rows: [], count: 0 })
+	const [records, setRecords] = useState({ rows: [], count: 0 })
 
 	useEffect(() => {
-		switch (current) {
-			case 'consultas':
-				getConsultationsByPet(pet.id)
-					.then(consultations => {
-						setConsultations(consultations)
-					})
-				break;
-			case 'vacunaciones':
-				getVaccinationsByPet(pet.id)
-					.then(consultations => {
-						setConsultations(consultations)
-					})
-				break;
-			case 'desparasitaciones':
-				getDewormingsByPet(pet.id)
-					.then(consultations => {
-						setConsultations(consultations)
-					})
-				break;
-			default:
+		const getData = async () => {
+			let records
+			switch (current) {
+				case 'consultas':
+					records = await getConsultationsByPet(pet.id)
+					setRecords(records)
+					break
+				case 'vacunaciones':
+					records = await getVaccinationsByPet(pet.id)
+					setRecords(records)
+					break
+				case 'desparasitaciones':
+					records = await getDewormingsByPet(pet.id)
+					setRecords(records)
+					break
+				case 'descarga-historial-medico':
+					const consultas = await getConsultationsByPet(pet.id)
+					const vacunaciones = await getVaccinationsByPet(pet.id)
+					const desparasitaciones = await getDewormingsByPet(pet.id)
+					records = { consultas, vacunaciones, desparasitaciones }
+					setRecords(records)
+					break
+				default:
+			}
 		}
+		getData()
 	}, [pet.id, current])
 
 	const handleEditConsultation = id => {
@@ -42,13 +48,13 @@ const Consultations = ({ pet, current }) => {
 		switch (current) {
 			case 'consultas':
 				pathName = `/edit-consulta/${id}`
-				break;
+				break
 			case 'vacunaciones':
 				pathName = `/edit-vacunacion/${id}`
-				break;
+				break
 			case 'desparasitaciones':
 				pathName = `/edit-desparasitacion/${id}`
-				break;
+				break
 			default:
 		}
 
@@ -70,32 +76,32 @@ const Consultations = ({ pet, current }) => {
 			case 'consultas':
 				deleteConsultation(selected)
 					.then(() => getConsultationsByPet(pet.id)
-						.then(consultations => {
-							setConsultations(consultations)
+						.then(records => {
+							setRecords(records)
 							setShowConfirm(false)
 						}))
-				break;
+				break
 			case 'vacunaciones':
 				deleteVaccination(selected)
 					.then(() => getVaccinationsByPet(pet.id)
-						.then(consultations => {
-							setConsultations(consultations)
+						.then(records => {
+							setRecords(records)
 							setShowConfirm(false)
 						}))
-				break;
+				break
 			case 'desparasitaciones':
 				deleteDeworming(selected)
 					.then(() => getDewormingsByPet(pet.id)
-						.then(consultations => {
-							setConsultations(consultations)
+						.then(records => {
+							setRecords(records)
 							setShowConfirm(false)
 						}))
-				break;
+				break
 			default:
 		}
 	}
 
-	const { count, rows } = consultations
+	const { count, rows } = records
 
 	return (
 		<>
@@ -112,12 +118,15 @@ const Consultations = ({ pet, current }) => {
 						confirmDelete={() => confirmDelete()}
 					/>
 				}
-				{!count && current && <div className="container text-center">
-					<div className="alert alert-warning">{`El paciente no registra ${current}`}</div>
-				</div>
+				{current === 'descarga-historial-medico' ?
+					<PDFGenerator data={records} pet={pet} />
+					:
+					!count && current && <div className="container text-center">
+						<div className="alert alert-warning">{`El paciente no registra ${current}`}</div>
+					</div>
 				}
 				<div className="consultations-list overflow-auto">
-					{rows.map((consultation, index) => <Consultation
+					{rows && rows.map((consultation, index) => <Consultation
 						key={index}
 						consultation={consultation}
 						editConsultation={handleEditConsultation}

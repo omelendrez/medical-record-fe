@@ -1,22 +1,26 @@
-import React, { useEffect, useState } from "react";
-import NavLink from "./NavLink";
-import { logout, getUser, readOnly } from "../services/utils";
+import React, { useEffect, useState, useCallback } from "react"
+import NavLink from "./NavLink"
+import { logout, getUser, readOnly } from "../services/utils"
 
 const Navbar = () => {
-  const [user, setUser] = useState({});
-  const [isSmallDevice, setIsSmallDevice] = useState(false);
-  const disabled = readOnly();
+  const [user, setUser] = useState({})
+  const [isSmallDevice, setIsSmallDevice] = useState(false)
+  const disabled = readOnly()
 
   useEffect(() => {
-    setUser(getUser());
-    window.onresize = windowResize;
-  }, []);
+    setUser(getUser())
+    window.onresize = windowResize
+    return () => (
+      window.onresize = null
+    )
+  }, [])
 
-  const handleLogout = (e) => {
-    e.preventDefault();
-    logout();
-  };
-  const windowResize = () => setIsSmallDevice(window.innerWidth < 768);
+  const handleLogout = useCallback((e) => {
+    e.preventDefault()
+    logout()
+  }, [])
+
+  const windowResize = () => setIsSmallDevice(window.innerWidth < 768)
 
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -56,7 +60,7 @@ const Navbar = () => {
         </button>
       </div>
     </nav>
-  );
-};
+  )
+}
 
-export default Navbar;
+export default Navbar
