@@ -2,7 +2,6 @@ import React from 'react'
 import { readOnly } from '../../../services/utils'
 
 const PetsList = ({ pet, pets, loadPet, handleAddPet }) => {
-
   return (
     !pet.name &&
     <div className="pets mt-2">
@@ -38,9 +37,7 @@ const PetsList = ({ pet, pets, loadPet, handleAddPet }) => {
           >Agregar paciente</button>
         </div>
       }
-
     </div >
-
   )
 }
 
