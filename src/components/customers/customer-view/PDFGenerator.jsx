@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { Document, Page, Text, View, PDFDownloadLink, PDFViewer, StyleSheet, Image } from "@react-pdf/renderer"
-import { formatDate, formatDateExtended, getTreatmentStage } from "../../../services/utils"
+import { formatDate, formatDateExtended, getTreatmentStage, getAge } from "../../../services/utils"
 import logo from '../../../logo.jpg'
 
 const styles = StyleSheet.create({
@@ -84,7 +84,7 @@ const PDFDocument = ({ records, pet, customer }) => {
               Paciente: {peName}
             </Text>
             {Boolean(email) && <Text style={styles.capitalize}>Raza: {breed}</Text>}
-            {Boolean(birthDate) && <Text>Fecha de nacimiento: {formatDate(birthDate)}</Text>}
+            {Boolean(birthDate) && <Text>Fecha de nacimiento: {formatDate(birthDate)} ({getAge(birthDate)})</Text>}
             {Boolean(weight) && <Text>Peso: {weight}</Text>}
             {Boolean(height) && <Text>Altura: {height}</Text>}
             {Boolean(color) && <Text>Color: {color}</Text>}
