@@ -8,7 +8,7 @@ import { getVaccinationsByPet, deleteVaccination } from '../../../services/vacci
 import { getDewormingsByPet, deleteDeworming } from '../../../services/dewormings'
 import { formatDate } from '../../../services/utils'
 
-const Consultations = ({ pet, current }) => {
+const Consultations = ({ customer, pet, current }) => {
 	const [redirect, setRedirect] = useState('')
 	const [selected, setSelected] = useState({})
 	const [showConfirm, setShowConfirm] = useState(false)
@@ -119,7 +119,7 @@ const Consultations = ({ pet, current }) => {
 					/>
 				}
 				{current === 'descarga-historial-medico' ?
-					<PDFGenerator data={records} pet={pet} />
+					<PDFGenerator data={records} pet={pet} customer={customer} />
 					:
 					!count && current && <div className="container text-center">
 						<div className="alert alert-warning">{`El paciente no registra ${current}`}</div>

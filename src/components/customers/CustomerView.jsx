@@ -177,7 +177,7 @@ const CustomerView = (props) => {
               )}
             </div>
             <div className="mt-1">
-              <Consultations pet={pet} current={current} />
+              <Consultations pet={pet} current={current} customer={customer} />
             </div>
           </div>
         )}
