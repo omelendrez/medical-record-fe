@@ -38,6 +38,9 @@ const styles = StyleSheet.create({
   capitalize: {
     textTransform: 'capitalize'
   },
+  line: {
+    marginBottom: 5
+  },
   lowercase: {
     textTransform: 'lowercase'
   },
@@ -110,10 +113,10 @@ const PDFDocument = ({ records, pet, customer }) => {
           return (
             <View style={styles.section} key={record.id}>
               <Text style={styles.itemDate}>{formatDate(record.date)}</Text>
-              {Boolean(record.anamnesis) && <Text>Anamnesis: {record.anamnesis}</Text>}
-              {Boolean(record.diagnosis) && <Text>Diagnostico: {record.diagnosis}</Text>}
-              {Boolean(record.treatment) && <Text>Tratamiento: {record.treatment}</Text>}
-              {Boolean(record.treatmentStage) && <Text>Status tratamiento: {getTreatmentStage(record.treatmentStage)}</Text>}
+              {Boolean(record.anamnesis) && <Text style={styles.line}>Anamnesis: {record.anamnesis}</Text>}
+              {Boolean(record.diagnosis) && <Text style={styles.line}>Diagnostico: {record.diagnosis}</Text>}
+              {Boolean(record.treatment) && <Text style={styles.line}>Tratamiento: {record.treatment}</Text>}
+              {Boolean(record.treatmentStage) && <Text style={styles.line}>Status tratamiento: {getTreatmentStage(record.treatmentStage)}</Text>}
             </View>
           )
         })}
