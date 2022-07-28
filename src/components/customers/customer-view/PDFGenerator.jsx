@@ -14,8 +14,7 @@ const styles = StyleSheet.create({
     lineHeight: 1.4,
     borderRadius: 5,
     borderColor: '#3388af',
-    margin: 20,
-    width: '60%'
+    margin: 20
   },
   section: {
     paddingTop: 10,
@@ -26,6 +25,11 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginRight: 40,
     fontSize: 12
+  },
+  title: {
+    fontSize: 20,
+    textAlign: 'center',
+    fontWeight: 'bold',
   },
   itemDate: {
     color: '#3388af',
@@ -54,14 +58,11 @@ const styles = StyleSheet.create({
   },
   logo: {
     width: "20%",
-    position: 'absolute',
-    top: 30,
-    right: 10
   }
 })
 
 const PDFDocument = ({ records, pet, customer }) => {
-  const { name: peName, breed, birthDate, weight, height, color } = pet
+  const { name: peName, type, sex, breed, birthDate, weight, height, color } = pet
   const { name: customerName, address, phone, email } = customer
 
   if (!records?.length) return null
@@ -73,24 +74,29 @@ const PDFDocument = ({ records, pet, customer }) => {
           {formatDateExtended(new Date())}
         </Text>
         <Image src={logo} alt="logo" style={styles.logo} />
-        <View style={styles.header}>
-          <View style={{ ...styles.section, border: 0, marginBottom: 0 }}>
-            <Text style={{ ...styles.name, ...styles.capitalize }}>
+        <View>
+          <Text style={styles.title}>HISTORIA CLINICA</Text>
+        </View>
+        <View style={{ ...styles.header, flexDirection: 'row' }}>
+          <View style={styles.section}>
+            <Text style={styles.name}>
+              Paciente: {peName}
+            </Text>
+            {Boolean(birthDate) && <Text>Fecha de nacimiento: {formatDate(birthDate)} ({getAge(birthDate)})</Text>}
+            {Boolean(type) && <Text>Tipo: {type}</Text>}
+            {Boolean(breed) && <Text style={styles.capitalize}>Raza: {breed}</Text>}
+            {Boolean(sex) && <Text>Sexo: {sex}</Text>}
+            {Boolean(weight) && <Text>Peso: {weight}</Text>}
+            {Boolean(height) && <Text>Altura: {height}</Text>}
+            {Boolean(color) && <Text>Color: {color}</Text>}
+          </View>
+          <View style={styles.section}>
+            <Text style={{ ...styles.name, ...styles.capitalize, color: '#000' }}>
               Cliente: {customerName}
             </Text>
             {Boolean(address) && <Text style={styles.capitalize}>Domicilio: {address}</Text>}
             {Boolean(phone) && <Text>Teléfono: {phone}</Text>}
             {Boolean(email) && <Text style={styles.lowercase}>Email: {email}</Text>}
-          </View>
-          <View style={{ ...styles.section, border: 0, marginTop: 0, marginBottom: 0 }}>
-            <Text style={styles.name}>
-              Paciente: {peName}
-            </Text>
-            {Boolean(email) && <Text style={styles.capitalize}>Raza: {breed}</Text>}
-            {Boolean(birthDate) && <Text>Fecha de nacimiento: {formatDate(birthDate)} ({getAge(birthDate)})</Text>}
-            {Boolean(weight) && <Text>Peso: {weight}</Text>}
-            {Boolean(height) && <Text>Altura: {height}</Text>}
-            {Boolean(color) && <Text>Color: {color}</Text>}
           </View>
         </View>
 
