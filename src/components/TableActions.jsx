@@ -21,4 +21,4 @@ const TableActions = ({ data, actionDelete, actionEdit }) => {
   )
 }
 
-export default TableActions
+export default React.memo(TableActions)

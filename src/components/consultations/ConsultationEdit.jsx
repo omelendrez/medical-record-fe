@@ -18,7 +18,7 @@ const ConsultationForm = props => {
     anamnesis: '',
     diagnosis: '',
     treatment: '',
-    treatmentStage: '{}',
+    treatmentStage: '',
     nextAppointment: '',
     amount: ''
   })
