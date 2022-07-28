@@ -188,7 +188,7 @@ export const formatDateFull = (dateTime) => moment(dateTime).format("l LT")
 
 export const setToday = () => moment(new Date()).format("YYYY-MM-DD")
 
-export const formatDateExtended = (dateTime) => moment(dateTime).format('MMMM Do YYYY, h:mm:ss a')
+export const formatDateExtended = (dateTime) => moment(dateTime).format('LLLL')
 
 export const logout = () => {
   localStorage.removeItem("user")
