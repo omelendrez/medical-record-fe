@@ -1,16 +1,26 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Amount from './Amount'
-import { formatNumber } from '../../../services/utils'
 
-const Balance = ({ amount, paid }) => {
+function Balance({ amount, paid }) {
   const amounts = [
-    { text: 'Consulta', value: formatNumber(amount) }]
+    { text: 'Consulta', value: amount },
+    { text: 'Pagó', value: paid || 0 },
+    { text: 'Saldo', value: (paid || 0) - amount }
+  ]
 
   return (
-    <div className={`float-right text-right balance ${amount > paid ? 'debt' : ''}`}>
-      {amounts.map((amount, index) => <Amount key={index} text={amount.text} value={amount.value} />)}
+    <div className="balance">
+      {amounts.map((amt) => (
+        <Amount key={amt.text} text={amt.text} value={amt.value} />
+      ))}
     </div>
   )
+}
+
+Balance.propTypes = {
+  amount: PropTypes.number.isRequired,
+  paid: PropTypes.number.isRequired
 }
 
 export default Balance

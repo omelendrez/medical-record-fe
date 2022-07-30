@@ -5,9 +5,9 @@ import Confirm from '../Confirm'
 import TableHeader from '../table/TableHeader'
 import Loading from '../Loading'
 import { getCustomers, deleteCustomer } from '../../services/customers'
-import { readOnly } from '../../services/utils'
+import { readOnly } from '../../helpers'
 
-const Customers = () => {
+function Customers() {
   const [filter, setFilter] = useState('')
   const paginationDefault = {
     curPage: 1,
@@ -27,38 +27,35 @@ const Customers = () => {
     const updateState = () => {
       setLoading(true)
       const pag = pagination
-      getCustomers(pagination)
-        .then(customers => {
-          pag.totRecords = customers.count
-          setPagination(pag)
-          setCustomers(customers)
-          setLoading(false)
-        })
+      getCustomers(pagination).then((custs) => {
+        pag.totRecords = custs.count
+        setPagination(pag)
+        setCustomers(custs)
+        setLoading(false)
+      })
     }
     updateState()
   }, [pagination])
 
-
-  const changePage = page => {
+  const changePage = (page) => {
     setPagination({ ...pagination, curPage: page })
   }
 
   const confirmDelete = () => {
-    deleteCustomer(selected)
-      .then(() => getCustomers(pagination)
-        .then(customers => {
-          setCustomers(customers)
-          setShowConfirm(false)
-        })
-      )
+    deleteCustomer(selected).then(() =>
+      getCustomers(pagination).then((custs) => {
+        setCustomers(custs)
+        setShowConfirm(false)
+      })
+    )
   }
 
-  const handleDelete = customer => {
+  const handleDelete = (customer) => {
     setSelected(customer)
     setShowConfirm(true)
   }
 
-  const handleEdit = customer => {
+  const handleEdit = (customer) => {
     setRedirect(`/edit-cliente/${customer.id}`)
   }
 
@@ -70,7 +67,7 @@ const Customers = () => {
     setRedirect('/restaurar/clientes')
   }
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     setFilter(e.target.value)
     if (!e.target.value) setPagination({ ...pagination, filter: '' })
   }
@@ -87,7 +84,7 @@ const Customers = () => {
 
   return (
     <>
-      {showConfirm &&
+      {showConfirm && (
         <Confirm
           title="Desactivando cliente"
           question={`¿Desea desactivar cliente ${selected.name}?`}
@@ -96,7 +93,7 @@ const Customers = () => {
           cancelDelete={() => setShowConfirm(false)}
           confirmDelete={() => confirmDelete()}
         />
-      }
+      )}
       {redirect && <Redirect to={redirect} />}
       <div className="container-fluid">
         <h3>Clientes</h3>
@@ -112,31 +109,44 @@ const Customers = () => {
         <table className="table table-sm table-responsive">
           <thead>
             <tr>
-              <th scope="col" style={{ width: '250px' }}>Nombre</th>
-              <th scope="col" style={{ width: '250px' }}>Paciente</th>
-              <th scope="col" style={{ width: '400px' }}>Domicilio</th>
-              <th scope="col" style={{ width: '400px' }}>Teléfono</th>
-              <th scope="col" style={{ width: '100px' }}>Observaciones</th>
+              <th scope="col" style={{ width: '250px' }}>
+                Nombre
+              </th>
+              <th scope="col" style={{ width: '250px' }}>
+                Paciente
+              </th>
+              <th scope="col" style={{ width: '400px' }}>
+                Domicilio
+              </th>
+              <th scope="col" style={{ width: '400px' }}>
+                Teléfono
+              </th>
+              <th scope="col" style={{ width: '100px' }}>
+                Observaciones
+              </th>
               <th scope="col" colSpan="3">
-                {!readOnly() &&
+                {!readOnly() && (
                   <button
+                    type="button"
                     className="btn btn-primary my-1 float-right text-nowrap"
                     onClick={() => handleAdd()}
-                  >Agregar Cliente</button>
-                }
+                  >
+                    Agregar Cliente
+                  </button>
+                )}
               </th>
             </tr>
           </thead>
           <tbody>
-            {rows.map((record, index) =>
+            {rows.map((record, index) => (
               <Customer
-                key={index}
+                key={record.id}
                 indice={index + 1}
                 data={record}
                 deleteCustomer={() => handleDelete(record)}
                 editCustomer={() => handleEdit(record)}
               />
-            )}
+            ))}
           </tbody>
         </table>
       </div>

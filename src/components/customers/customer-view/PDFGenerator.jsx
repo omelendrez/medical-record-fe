@@ -1,6 +1,21 @@
-import React, { useState, useEffect } from "react"
-import { Document, Page, Text, View, PDFDownloadLink, PDFViewer, StyleSheet, Image } from "@react-pdf/renderer"
-import { formatDate, formatDateExtended, getTreatmentStage, getAge } from "../../../services/utils"
+import React, { useState, useEffect } from 'react'
+import PropTypes from 'prop-types'
+import {
+  Document,
+  Page,
+  Text,
+  View,
+  PDFDownloadLink,
+  PDFViewer,
+  StyleSheet,
+  Image
+} from '@react-pdf/renderer'
+import {
+  formatDate,
+  formatDateExtended,
+  getTreatmentStage,
+  getAge
+} from '../../../helpers'
 import logo from '../../../logo.jpg'
 
 const styles = StyleSheet.create({
@@ -29,7 +44,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     textAlign: 'center',
-    fontWeight: 'bold',
+    fontWeight: 'bold'
   },
   itemDate: {
     color: '#3388af',
@@ -57,12 +72,21 @@ const styles = StyleSheet.create({
     top: 20
   },
   logo: {
-    width: "20%",
+    width: '20%'
   }
 })
 
-const PDFDocument = ({ records, pet, customer }) => {
-  const { name: peName, type, sex, breed, birthDate, weight, height, color } = pet
+function PDFDocument({ records, pet, customer }) {
+  const {
+    name: petName,
+    type,
+    sex,
+    breed,
+    birthDate,
+    weight,
+    height,
+    color
+  } = pet
   const { name: customerName, address, phone, email } = customer
 
   if (!records?.length) return null
@@ -70,33 +94,43 @@ const PDFDocument = ({ records, pet, customer }) => {
   return (
     <Document>
       <Page style={styles.page} orientation="portrait" size="A4">
-        <Text style={styles.date}>
-          {formatDateExtended(new Date())}
-        </Text>
+        <Text style={styles.date}>{formatDateExtended(new Date())}</Text>
         <Image src={logo} alt="logo" style={styles.logo} />
         <View>
           <Text style={styles.title}>HISTORIA CLINICA</Text>
         </View>
         <View style={{ ...styles.header, flexDirection: 'row' }}>
           <View style={styles.section}>
-            <Text style={styles.name}>
-              Paciente: {peName}
-            </Text>
-            {Boolean(birthDate) && <Text>Fecha de nacimiento: {formatDate(birthDate)} ({getAge(birthDate)})</Text>}
-            {Boolean(type) && <Text>Tipo: {type}</Text>}
-            {Boolean(breed) && <Text style={styles.capitalize}>Raza: {breed}</Text>}
-            {Boolean(sex) && <Text>Sexo: {sex}</Text>}
-            {Boolean(weight) && <Text>Peso: {weight}</Text>}
-            {Boolean(height) && <Text>Altura: {height}</Text>}
-            {Boolean(color) && <Text>Color: {color}</Text>}
+            <Text style={styles.name}>{`Paciente: ${petName}`}</Text>
+            {Boolean(birthDate) && (
+              <Text>
+                {`Fecha de nacimiento: ${formatDate(birthDate)} (${getAge(
+                  birthDate
+                )})`}
+              </Text>
+            )}
+            {Boolean(type) && <Text>{`Tipo: ${type}`}</Text>}
+            {Boolean(breed) && (
+              <Text style={styles.capitalize}>{`Raza: ${breed}`}</Text>
+            )}
+            {Boolean(sex) && <Text>{`Sexo: ${sex}`}</Text>}
+            {Boolean(weight) && <Text>{`Peso: ${weight}`}</Text>}
+            {Boolean(height) && <Text>{`Altura: ${height}`}</Text>}
+            {Boolean(color) && <Text>{`Color: ${color}`}</Text>}
           </View>
           <View style={styles.section}>
-            <Text style={{ ...styles.name, ...styles.capitalize, color: '#000' }}>
-              Cliente: {customerName}
+            <Text
+              style={{ ...styles.name, ...styles.capitalize, color: '#000' }}
+            >
+              {`Cliente: ${customerName}`}
             </Text>
-            {Boolean(address) && <Text style={styles.capitalize}>Domicilio: {address}</Text>}
-            {Boolean(phone) && <Text>Teléfono: {phone}</Text>}
-            {Boolean(email) && <Text style={styles.lowercase}>Email: {email}</Text>}
+            {Boolean(address) && (
+              <Text style={styles.capitalize}>{`Domicilio: ${address}`}</Text>
+            )}
+            {Boolean(phone) && <Text>{`Teléfono: ${phone}`}</Text>}
+            {Boolean(email) && (
+              <Text style={styles.lowercase}>{`Email: ${email}`}</Text>
+            )}
           </View>
         </View>
 
@@ -105,7 +139,7 @@ const PDFDocument = ({ records, pet, customer }) => {
             return (
               <View style={styles.section} key={record.id}>
                 <Text style={styles.itemDate}>{formatDate(record.date)}</Text>
-                <Text>Vacuna: {record.vaccination}</Text>
+                <Text>{`Vacuna: ${record.vaccination}`}</Text>
               </View>
             )
           }
@@ -113,35 +147,61 @@ const PDFDocument = ({ records, pet, customer }) => {
             return (
               <View style={styles.section} key={record.id}>
                 <Text style={styles.itemDate}>{formatDate(record.date)}</Text>
-                <Text>Desparasitación: {record.deworming}</Text>
-              </View>)
+                <Text>{`Desparasitación: ${record.deworming}`}</Text>
+              </View>
+            )
           }
           return (
             <View style={styles.section} key={record.id}>
               <Text style={styles.itemDate}>{formatDate(record.date)}</Text>
-              {Boolean(record.anamnesis) && <Text style={styles.line}>Anamnesis: {record.anamnesis}</Text>}
-              {Boolean(record.diagnosis) && <Text style={styles.line}>Diagnostico: {record.diagnosis}</Text>}
-              {Boolean(record.treatment) && <Text style={styles.line}>Tratamiento: {record.treatment}</Text>}
-              {Boolean(record.treatmentStage) && <Text style={styles.line}>Status tratamiento: {getTreatmentStage(record.treatmentStage)}</Text>}
+              {Boolean(record.anamnesis) && (
+                <Text style={styles.line}>
+                  {`Anamnesis: ${record.anamnesis}`}
+                </Text>
+              )}
+              {Boolean(record.diagnosis) && (
+                <Text style={styles.line}>
+                  {`Diagnostico: ${record.diagnosis}`}
+                </Text>
+              )}
+              {Boolean(record.treatment) && (
+                <Text style={styles.line}>
+                  {`Tratamiento: ${record.treatment}`}
+                </Text>
+              )}
+              {Boolean(record.treatmentStage) && (
+                <Text style={styles.line}>
+                  {`Status tratamiento: ${getTreatmentStage(
+                    record.treatmentStage
+                  )}`}
+                </Text>
+              )}
             </View>
           )
         })}
         <View style={{ ...styles.section, border: 0, marginTop: 10 }}>
-          <Text>Veterinaria Colitas Felices, Bahía Blanca, {formatDateExtended(new Date())}</Text>
+          <Text>
+            {`Veterinaria Colitas Felices, Bahía Blanca, ${formatDateExtended(
+              new Date()
+            )}`}
+          </Text>
         </View>
-
       </Page>
     </Document>
   )
 }
 
-const PDFGenerator = ({ customer, pet, data }) => {
+function PDFGenerator({ customer, pet, data }) {
   const [records, setRecords] = useState([])
   useEffect(() => {
     if (data.consultas) {
       const { consultas, vacunaciones, desparasitaciones } = data
-      const records = [...consultas.rows, ...vacunaciones.rows, ...desparasitaciones.rows]
-      setRecords(records.sort((a, b) => new Date(a.date) - new Date(b.date)))
+      const rec = [
+        ...consultas.rows,
+        ...vacunaciones.rows,
+        ...desparasitaciones.rows
+      ]
+      setRecords(rec.sort((a, b) => new Date(a.date) - new Date(b.date)))
     }
   }, [data])
 
@@ -150,17 +210,32 @@ const PDFGenerator = ({ customer, pet, data }) => {
   return (
     <>
       <PDFDownloadLink
-        document={<PDFDocument records={records} pet={pet} customer={customer} />}
+        document={
+          <PDFDocument records={records} pet={pet} customer={customer} />
+        }
         fileName={`${pet.name}-Historia-Clinica.pdf`}
       >
-        <button className='btn btn-primary'>Descargar PDF</button>
+        <button type="button" className="btn btn-primary">
+          Descargar PDF
+        </button>
       </PDFDownloadLink>
-      <PDFViewer style={{ width: "100%", height: "90vh" }}>
+      <PDFViewer style={{ width: '100%', height: '90vh' }}>
         <PDFDocument records={records} pet={pet} customer={customer} />
       </PDFViewer>
     </>
   )
 }
 
-export default PDFGenerator
+PDFGenerator.propTypes = {
+  customer: PropTypes.instanceOf(Object).isRequired,
+  pet: PropTypes.instanceOf(Object).isRequired,
+  data: PropTypes.instanceOf(Object).isRequired
+}
 
+PDFDocument.propTypes = {
+  records: PropTypes.instanceOf(Array).isRequired,
+  pet: PropTypes.instanceOf(Object).isRequired,
+  customer: PropTypes.instanceOf(Object).isRequired
+}
+
+export default PDFGenerator

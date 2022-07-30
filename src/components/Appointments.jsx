@@ -2,19 +2,18 @@ import React, { useEffect, useState } from 'react'
 import { getProgrammedVisits as con } from '../services/consultations'
 import { getProgrammedVisits as vac } from '../services/vaccinations'
 import { getProgrammedVisits as dew } from '../services/dewormings'
-import ProgrammedVisits from '../components/ProgrammedVisits'
+import ProgrammedVisits from './ProgrammedVisits'
 import Loading from './Loading'
 
-const Appointments = () => {
+function Appointments() {
   const [appointments, setAppointments] = useState([])
   const [loading, setLoading] = useState(true)
 
-  const updateData = (data, type) => {
-    return data.rows.map(item => {
-      item = { ...item, type }
-      return item
+  const updateData = (data, type) =>
+    data.rows.map((item) => {
+      const newItem = { ...item, type }
+      return newItem
     })
-  }
 
   useEffect(() => {
     setLoading(true)
@@ -40,14 +39,15 @@ const Appointments = () => {
       setLoading(false)
     }
     updateState()
-
   }, [])
 
   if (loading) return <Loading />
 
   return (
     <div className="programmed-visits">
-      {appointments.length > 0 && <ProgrammedVisits appointments={appointments} />}
+      {appointments.length > 0 && (
+        <ProgrammedVisits appointments={appointments} />
+      )}
     </div>
   )
 }

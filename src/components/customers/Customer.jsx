@@ -1,13 +1,13 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import './Customer.css'
-import TableActions from '../TableActions'
-import { formatDateFull } from '../../services/utils'
+import TableActions from '../table/TableActions'
+import { formatDateFull } from '../../helpers'
 
-const Customer = ({ data, deleteCustomer, editCustomer }) => {
-
+function Customer({ data, deleteCustomer, editCustomer }) {
   const { id, name, address, phone, pets, observations, updatedAt, user } = data
-  const petsList = pets.map(pet => pet.name)
+  const petsList = pets.map((pet) => pet.name)
   const userName = user ? user.name : ''
 
   return (
@@ -16,9 +16,7 @@ const Customer = ({ data, deleteCustomer, editCustomer }) => {
         <Link to={`/clientes/${id}`}>{name}</Link>
       </td>
       <td>
-        <div className="pet-list">
-          {petsList.join(', ')}
-        </div>
+        <div className="pet-list">{petsList.join(', ')}</div>
       </td>
       <td>{address}</td>
       <td>{phone}</td>
@@ -32,9 +30,33 @@ const Customer = ({ data, deleteCustomer, editCustomer }) => {
         actionEdit={editCustomer}
         data={data}
       />
-
     </tr>
   )
+}
+
+Customer.propTypes = {
+  data: PropTypes.shape({
+    id: PropTypes.number,
+    name: PropTypes.string,
+    address: PropTypes.string,
+    phone: PropTypes.string,
+    pets: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number,
+        name: PropTypes.string,
+        species: PropTypes.string,
+        breed: PropTypes.string
+      })
+    ),
+    observations: PropTypes.string,
+    updatedAt: PropTypes.string,
+    user: PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.string
+    })
+  }).isRequired,
+  deleteCustomer: PropTypes.func.isRequired,
+  editCustomer: PropTypes.func.isRequired
 }
 
 export default Customer

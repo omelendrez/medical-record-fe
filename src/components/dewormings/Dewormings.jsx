@@ -6,7 +6,7 @@ import Confirm from '../Confirm'
 import Loading from '../Loading'
 import { getDewormings, deleteDeworming } from '../../services/dewormings'
 
-const Dewormings = () => {
+function Dewormings() {
   const [filter, setFilter] = useState('')
   const paginationDefault = {
     curPage: 1,
@@ -26,52 +26,48 @@ const Dewormings = () => {
     const updateState = () => {
       setLoading(true)
       const pag = pagination
-      getDewormings(pagination)
-        .then(dewormings => {
-          pag.totRecords = dewormings.count
-          setPagination(pag)
-          setDewormings(dewormings)
-          setLoading(false)
-        })
+      getDewormings(pagination).then((deworms) => {
+        pag.totRecords = deworms.count
+        setPagination(pag)
+        setDewormings(deworms)
+        setLoading(false)
+      })
     }
     updateState()
   }, [pagination])
 
-
-  const changePage = page => {
+  const changePage = (page) => {
     setPagination({ ...pagination, curPage: page })
   }
 
-  const handleDelete = deworming => {
+  const handleDelete = (deworming) => {
     setSelected(deworming)
     setShowConfirm(true)
   }
 
   const confirmDelete = () => {
-    deleteDeworming(selected)
-      .then(() => getDewormings(pagination)
-        .then(dewormings => {
-          setDewormings(dewormings)
-          setShowConfirm(false)
-        })
-      )
+    deleteDeworming(selected).then(() =>
+      getDewormings(pagination).then((deworms) => {
+        setDewormings(deworms)
+        setShowConfirm(false)
+      })
+    )
   }
 
-  const handleEdit = deworming => {
+  const handleEdit = (deworming) => {
     setRedirect({
       pathname: `/edit-desparasitacion/${deworming.id}`,
       state: {
         from: '/desparasitaciones'
       }
     })
-
   }
 
   const handleRestore = () => {
     setRedirect('/restaurar/desparasitaciones')
   }
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     setFilter(e.target.value)
     if (!e.target.value) setPagination({ ...pagination, filter: '' })
   }
@@ -88,7 +84,7 @@ const Dewormings = () => {
 
   return (
     <>
-      {showConfirm &&
+      {showConfirm && (
         <Confirm
           title="Desactivando desparasitación"
           question={`¿Desea desactivar la desparasitación del ${selected.date} del paciente ${selected.petName}?`}
@@ -97,7 +93,7 @@ const Dewormings = () => {
           cancelDelete={() => setShowConfirm(false)}
           confirmDelete={() => confirmDelete()}
         />
-      }
+      )}
       {redirect && <Redirect to={redirect} />}
       <div className="container-fluid">
         <h3>Desparasitaciones</h3>
@@ -118,21 +114,24 @@ const Dewormings = () => {
               <th scope="col">Paciente</th>
               <th scope="col">Cliente</th>
               <th scope="col">Desparasitación</th>
-              <th scope="col" className="text-nowrap">Próx. Turno</th>
+              <th scope="col" className="text-nowrap">
+                Próx. Turno
+              </th>
               <th scope="col" colSpan="3">
+                &nbsp;
               </th>
             </tr>
           </thead>
           <tbody>
-            {rows.map((record, index) =>
+            {rows.map((record, index) => (
               <Deworming
-                key={index}
+                key={record.id}
                 indice={index + 1}
                 data={record}
                 deleteDeworming={() => handleDelete(record)}
                 editDeworming={() => handleEdit(record)}
               />
-            )}
+            ))}
           </tbody>
         </table>
       </div>

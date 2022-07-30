@@ -1,11 +1,11 @@
 import http from './api'
 
-export const savePayment = payment => {
-  return new Promise((resolve, reject) => {
-    http.post('accounts', payment)
-      .then(response => {
+export const savePayment = (payment) =>
+  new Promise((resolve, reject) => {
+    http
+      .post('accounts', payment)
+      .then((response) => {
         resolve(response.data)
       })
-      .catch(error => reject(error))
+      .catch((error) => reject(error))
   })
-}

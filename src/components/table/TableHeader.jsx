@@ -1,7 +1,8 @@
-import React from "react";
-import Pagination from "../Pagination";
-import { readOnly } from "../../services/utils";
-import "./TableHeader.css";
+import React from 'react'
+import PropTypes from 'prop-types'
+import Pagination from '../Pagination'
+import { readOnly } from '../../helpers'
+import './TableHeader.css'
 
 export default function TableHeader({
   handleChange,
@@ -9,9 +10,9 @@ export default function TableHeader({
   handleClick,
   pagination,
   changePage,
-  handleRestore,
+  handleRestore
 }) {
-  const smallDevice = window.innerWidth < 768;
+  const smallDevice = window.innerWidth < 768
   return (
     <div className="table-header">
       <div>
@@ -24,7 +25,11 @@ export default function TableHeader({
         />
       </div>
       <div>
-        <button className="btn btn-warning" onClick={(e) => handleClick(e)}>
+        <button
+          type="submit"
+          className="btn btn-warning"
+          onClick={(e) => handleClick(e)}
+        >
           Buscar
         </button>
       </div>
@@ -37,6 +42,7 @@ export default function TableHeader({
       {!readOnly() && handleRestore && (
         <div>
           <button
+            type="button"
             className="btn btn-outline-secondary"
             onClick={() => handleRestore()}
           >
@@ -45,5 +51,14 @@ export default function TableHeader({
         </div>
       )}
     </div>
-  );
+  )
+}
+
+TableHeader.propTypes = {
+  handleChange: PropTypes.func.isRequired,
+  filter: PropTypes.string.isRequired,
+  handleClick: PropTypes.func.isRequired,
+  pagination: PropTypes.instanceOf(Object).isRequired,
+  changePage: PropTypes.func.isRequired,
+  handleRestore: PropTypes.func.isRequired
 }

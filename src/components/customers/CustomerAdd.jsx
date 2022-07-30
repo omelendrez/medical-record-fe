@@ -3,7 +3,7 @@ import { Redirect } from 'react-router-dom'
 import { saveCustomer } from '../../services/customers'
 import FormActions from '../FormActions'
 
-const CustomerForm = () => {
+function CustomerForm() {
   const [redirect, setRedirect] = useState('')
   const [error, setError] = useState('')
   const [form, setForm] = useState({
@@ -14,24 +14,26 @@ const CustomerForm = () => {
     observations: ''
   })
 
-  const handleChange = (e => {
+  const handleChange = (e) => {
     e.preventDefault()
-    error && setError(false)
+    if (error) {
+      setError(false)
+    }
     setForm({
       ...form,
       [e.target.id]: e.target.value
     })
-  })
+  }
 
-  const handleSave = (e => {
+  const handleSave = () => {
     saveCustomer(form)
-      .then(resp => {
+      .then((resp) => {
         setRedirect(`/clientes/${resp.record.id}`)
       })
-      .catch(err => {
+      .catch((err) => {
         setError(err.response.data.error)
       })
-  })
+  }
 
   return (
     <>
@@ -49,7 +51,7 @@ const CustomerForm = () => {
                       type="text"
                       className="form-control"
                       id="name"
-                      onChange={e => handleChange(e)}
+                      onChange={(e) => handleChange(e)}
                       value={form.name}
                       required
                     />
@@ -62,7 +64,7 @@ const CustomerForm = () => {
                       type="text"
                       className="form-control"
                       id="address"
-                      onChange={e => handleChange(e)}
+                      onChange={(e) => handleChange(e)}
                       value={form.address}
                       required
                     />
@@ -77,7 +79,7 @@ const CustomerForm = () => {
                       type="text"
                       className="form-control"
                       id="phone"
-                      onChange={e => handleChange(e)}
+                      onChange={(e) => handleChange(e)}
                       value={form.phone}
                       required
                     />
@@ -90,7 +92,7 @@ const CustomerForm = () => {
                       type="text"
                       className="form-control"
                       id="email"
-                      onChange={e => handleChange(e)}
+                      onChange={(e) => handleChange(e)}
                       value={form.email}
                       required
                     />
@@ -102,17 +104,16 @@ const CustomerForm = () => {
                 <textarea
                   className="form-control"
                   id="observations"
-                  onChange={e => handleChange(e)}
+                  onChange={(e) => handleChange(e)}
                   value={form.observations}
                 />
               </div>
 
               <FormActions
-                doSave={e => handleSave(e)}
+                doSave={(e) => handleSave(e)}
                 cancelSave={() => setRedirect('/clientes')}
                 error={error}
               />
-
             </form>
           </div>
         </div>

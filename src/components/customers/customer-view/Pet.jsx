@@ -1,9 +1,11 @@
 import React from 'react'
-import { getSexName, getAge } from '../../../services/utils'
+import PropTypes from 'prop-types'
+import { getSexName, getAge } from '../../../helpers'
 import './Pet.css'
 
-const Pet = ({ pet }) => {
-  const { name, type, breed, sex, weight, birthDate, observations, statusId } = pet
+function Pet({ pet }) {
+  const { name, type, breed, sex, weight, birthDate, observations, statusId } =
+    pet
   return (
     <div className="card pet">
       <div className="card-body">
@@ -14,10 +16,16 @@ const Pet = ({ pet }) => {
         <h6 className="card-subtitle mb-2 text-muted">{weight}</h6>
         <h6 className="card-subtitle mb-2 text-muted">{getAge(birthDate)}</h6>
         <p className="card-text observations">{observations}</p>
-        <p className={`status ${statusId === 1 ? 'active' : 'inactive'}`}>{statusId === 1 ? 'Activo' : 'Inactivo'}</p>
+        <p className={`status ${statusId === 1 ? 'active' : 'inactive'}`}>
+          {statusId === 1 ? 'Activo' : 'Inactivo'}
+        </p>
       </div>
     </div>
   )
+}
+
+Pet.propTypes = {
+  pet: PropTypes.instanceOf(Object).isRequired
 }
 
 export default Pet

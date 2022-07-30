@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from 'react'
+import { Redirect } from 'react-router-dom'
 import FormFooter from '../FormFooter'
 import { getPet } from '../../services/pets'
-import { Redirect } from 'react-router-dom'
 import { saveDeworming, getDeworming } from '../../services/dewormings'
 import FormActions from '../FormActions'
 import './DewormingForm.css'
 
-const DewormingForm = props => {
+function DewormingForm(props) {
+  const {
+    location,
+    match: {
+      params: { dewormingId }
+    }
+  } = props || {}
   const [redirect, setRedirect] = useState('')
   const [error, setError] = useState('')
   const [form, setForm] = useState({
@@ -21,38 +27,40 @@ const DewormingForm = props => {
 
   const [pet, setPet] = useState({})
 
+  const goBack = () => {
+    const { state } = location
+    setRedirect({
+      pathname: `${state.from}`,
+      state: { current: 'desparasitaciones' }
+    })
+  }
+
   useEffect(() => {
-    getDeworming(props.match.params.dewormingId)
-      .then(deworming => {
-        setForm(deworming)
-        getPet(deworming.petId)
-          .then(pet => setPet(pet))
-      })
-  }, [props.match.params.dewormingId])
+    getDeworming(dewormingId).then((deworming) => {
+      setForm(deworming)
+      getPet(deworming.petId).then((p) => setPet(p))
+    })
+  }, [dewormingId])
 
-
-  const handleChange = (e => {
+  const handleChange = (e) => {
     e.preventDefault()
-    error && setError(false)
-    let { id, value } = e.target
+    if (error) {
+      setError(false)
+    }
+    const { id, value } = e.target
     setForm({
       ...form,
       [id]: value
     })
-  })
+  }
 
-  const handleSave = (e => {
+  const handleSave = (e) => {
     e.preventDefault()
     saveDeworming(form)
       .then(() => goBack())
-      .catch(err => {
+      .catch((err) => {
         setError(err.response.data.error)
       })
-  })
-
-  const goBack = () => {
-    const { state } = props.location
-    setRedirect({ pathname: `${state.from}`, state: { current: 'desparasitaciones' } })
   }
 
   return (
@@ -61,18 +69,21 @@ const DewormingForm = props => {
       <div className="container-fluid">
         <div className="row">
           <div className="container">
-            <h5 className="my-3">Editando Desparasitación de {pet.name}</h5>
+            <h5 className="my-3">{`Editando Desparasitación de ${pet.name}`}</h5>
             <form>
-
               <div className="form-container card p-3 mb-3">
-
                 <div className="form-group row">
-                  <label htmlFor="deworming" className="col-sm-2 col-form-label">Desparasitación</label>
+                  <label
+                    htmlFor="deworming"
+                    className="col-sm-2 col-form-label"
+                  >
+                    Desparasitación
+                  </label>
                   <div className="col-sm-10">
                     <textarea
                       className="form-control"
                       id="deworming"
-                      onChange={e => handleChange(e)}
+                      onChange={(e) => handleChange(e)}
                       value={form.deworming}
                       rows="2"
                     />
@@ -82,11 +93,10 @@ const DewormingForm = props => {
               <FormFooter form={form} handleChange={handleChange} />
 
               <FormActions
-                doSave={e => handleSave(e)}
+                doSave={(e) => handleSave(e)}
                 cancelSave={() => goBack()}
                 error={error}
               />
-
             </form>
           </div>
         </div>
