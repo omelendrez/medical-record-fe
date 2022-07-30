@@ -1,10 +1,16 @@
 {
   "name": "medical-record-fe",
   "version": "1.0.0",
+  "description": "Medical Record Frontend",
   "private": true,
+  "author": "Omar Melendrez <omar.melendrez@gmail.com>",
   "engines": {
-    "node": "16.13.2",
+    "node": "16",
     "npm": "8.1.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/omelendrez/medical-record-fe.git"
   },
   "dependencies": {
     "@react-pdf/renderer": "^2.3.0",
