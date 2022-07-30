@@ -1,28 +1,54 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import './Modal.css'
 
-const Modal = props => {
-  const { show, toggleModal, title, onSubmit, error } = props
+function Modal(props) {
+  const { show, toggleModal, title, onSubmit, error, children } = props
   const style = { display: show ? 'block' : 'none' }
 
   return (
     <div className="local-modal" style={style}>
       <div className="local-modal-content p-4  col-lg-8">
         <div className="local-modal-header">
-          <span className="close" onClick={e => toggleModal(e)}>&times;</span>
+          <span className="close" onClick={(e) => toggleModal(e)}>
+            &times;
+          </span>
           <h5>{title}</h5>
         </div>
-        <div className="local-modal-body my-5">
-          {props.children}
-        </div>
+        <div className="local-modal-body my-5">{children}</div>
         <div className="local-modal-footer">
-          <button className="btn btn-primary" onClick={e => onSubmit(e)}>Guardar</button>
-          <button className="btn btn-danger float-right" onClick={e => toggleModal(e)}>Volver</button>
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={(e) => onSubmit(e)}
+          >
+            Guardar
+          </button>
+          <button
+            type="button"
+            className="btn btn-danger float-right"
+            onClick={(e) => toggleModal(e)}
+          >
+            Volver
+          </button>
         </div>
-        {error && <div className="alert alert-danger mt-3" role="alert">{error}</div>}
+        {error && (
+          <div className="alert alert-danger mt-3" role="alert">
+            {error}
+          </div>
+        )}
       </div>
     </div>
   )
+}
+
+Modal.propTypes = {
+  show: PropTypes.bool.isRequired,
+  toggleModal: PropTypes.func.isRequired,
+  title: PropTypes.string.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  error: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired
 }
 
 export default Modal

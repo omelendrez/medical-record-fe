@@ -1,90 +1,98 @@
-import React, { useState, useEffect } from "react";
-import { Redirect } from "react-router-dom";
-import { savePet, getPet } from "../../services/pets";
+import React, { useState, useEffect } from 'react'
+import { Redirect } from 'react-router-dom'
+import { savePet, getPet } from '../../services/pets'
 import {
   sexList,
   getDateFromDays,
   getDateFromMonths,
-  getDateFromYears,
-} from "../../services/utils";
-import FormActions from "../FormActions";
+  getDateFromYears
+} from '../../helpers'
+import FormActions from '../FormActions'
 
-const PetForm = (props) => {
-  const [back, setBack] = useState(false);
-  const [error, setError] = useState("");
+function PetForm(props) {
+  const {
+    match: {
+      params: { id }
+    }
+  } = props || {}
+
+  const [back, setBack] = useState(false)
+  const [error, setError] = useState('')
 
   const [form, setForm] = useState({
-    customerId: "",
-    name: "",
-    type: "",
-    breed: "",
-    observations: "",
-    sex: "",
-    birthDate: "",
-    weight: "",
-  });
+    customerId: '',
+    name: '',
+    type: '',
+    breed: '',
+    observations: '',
+    sex: '',
+    birthDate: '',
+    weight: ''
+  })
 
   useEffect(() => {
-    getPet(props.match.params.id).then((pet) => setForm(pet));
-  }, [props.match.params.id]);
+    getPet(id).then((pet) => setForm(pet))
+  }, [id])
 
   const handleChange = (e) => {
-    e.preventDefault();
-    error && setError(false);
+    e.preventDefault()
+    if (error) {
+      setError(false)
+    }
     setForm({
       ...form,
-      [e.target.id]: e.target.value,
-    });
-  };
+      [e.target.id]: e.target.value
+    })
+  }
 
   const handleYearsChange = (e) => {
-    e.preventDefault();
-    const birthDate = getDateFromYears(e.target.value);
+    e.preventDefault()
+    const birthDate = getDateFromYears(e.target.value)
     setForm({
       ...form,
       birthDate,
       years: e.target.value,
-      months: "",
-      days: "",
-    });
-  };
+      months: '',
+      days: ''
+    })
+  }
 
   const handleMonthsChange = (e) => {
-    e.preventDefault();
-    const birthDate = getDateFromMonths(e.target.value);
+    e.preventDefault()
+    const birthDate = getDateFromMonths(e.target.value)
     setForm({
       ...form,
       birthDate,
-      years: "",
+      years: '',
       months: e.target.value,
-      days: "",
-    });
-  };
+      days: ''
+    })
+  }
 
   const handleDaysChange = (e) => {
-    e.preventDefault();
-    const birthDate = getDateFromDays(e.target.value);
+    e.preventDefault()
+    const birthDate = getDateFromDays(e.target.value)
     setForm({
       ...form,
       birthDate,
-      years: "",
-      months: "",
-      days: e.target.value,
-    });
-  };
+      years: '',
+      months: '',
+      days: e.target.value
+    })
+  }
 
   const handleSave = (e) => {
-    e.preventDefault();
+    e.preventDefault()
     savePet(form)
       .then(() => setBack(true))
       .catch((err) => {
-        setError(err.response.data.error);
-      });
-  };
+        setError(err.response.data.error)
+      })
+  }
 
   return (
     <>
-      {back && <Redirect to={`/pacientes`} />}
+      {back && <Redirect to="/pacientes" />}
       <div className="container">
         <div className="row">
           <div className="container col-lg-8">
@@ -141,13 +149,11 @@ const PetForm = (props) => {
                       onChange={(e) => handleChange(e)}
                       value={form.sex}
                     >
-                      {sexList.map((sex) => {
-                        return (
-                          <option key={sex.id} value={sex.id}>
-                            {sex.name}
-                          </option>
-                        );
-                      })}
+                      {sexList.map((sex) => (
+                        <option key={sex.id} value={sex.id}>
+                          {sex.name}
+                        </option>
+                      ))}
                     </select>
                   </div>
                 </div>
@@ -238,7 +244,7 @@ const PetForm = (props) => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default PetForm;
+export default PetForm

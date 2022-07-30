@@ -6,7 +6,7 @@ import TableHeader from '../table/TableHeader'
 import Loading from '../Loading'
 import { getPets, deletePet } from '../../services/pets'
 
-const Pets = () => {
+function Pets() {
   const [filter, setFilter] = useState('')
 
   const paginationDefault = {
@@ -27,38 +27,35 @@ const Pets = () => {
     const updateState = () => {
       setLoading(true)
       const pag = pagination
-      getPets(pagination)
-        .then(pets => {
-          pag.totRecords = pets.count
-          setPagination(pag)
-          setPets(pets)
-          setLoading(false)
-        })
+      getPets(pagination).then((petsList) => {
+        pag.totRecords = petsList.count
+        setPagination(pag)
+        setPets(petsList)
+        setLoading(false)
+      })
     }
     updateState()
   }, [pagination])
 
-
-  const changePage = page => {
+  const changePage = (page) => {
     setPagination({ ...pagination, curPage: page })
   }
 
-  const handleDelete = pet => {
+  const handleDelete = (pet) => {
     setSelected(pet)
     setShowConfirm(true)
   }
 
   const confirmDelete = () => {
-    deletePet(selected)
-      .then(() => getPets(pagination)
-        .then(pets => {
-          setPets(pets)
-          setShowConfirm(false)
-        })
-      )
+    deletePet(selected).then(() =>
+      getPets(pagination).then((petsList) => {
+        setPets(petsList)
+        setShowConfirm(false)
+      })
+    )
   }
 
-  const handleEdit = pet => {
+  const handleEdit = (pet) => {
     setRedirect(`./edit-paciente/${pet.id}`)
   }
 
@@ -66,17 +63,15 @@ const Pets = () => {
     setRedirect('/restaurar/pacientes')
   }
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     setFilter(e.target.value)
     if (!e.target.value) setPagination({ ...pagination, filter: '' })
-
   }
 
   const handleClick = (e) => {
     e.preventDefault()
     setPagination({ ...pagination, filter, curPage: 1 })
   }
-
 
   const { rows } = pets
   const totPages = Math.ceil(pagination.totRecords / pagination.limit)
@@ -85,7 +80,7 @@ const Pets = () => {
 
   return (
     <>
-      {showConfirm &&
+      {showConfirm && (
         <Confirm
           title="Desactivando paciente"
           question={`¿Desea desactivar paciente ${selected.name}?`}
@@ -94,7 +89,7 @@ const Pets = () => {
           cancelDelete={() => setShowConfirm(false)}
           confirmDelete={() => confirmDelete()}
         />
-      }
+      )}
       {redirect && <Redirect to={redirect} />}
       <div className="container-fluid">
         <h3>Pacientes</h3>
@@ -116,19 +111,21 @@ const Pets = () => {
               <th scope="col">Raza</th>
               <th scope="col">Sexo</th>
               <th scope="col">Edad</th>
-              <th scope="col" colSpan="3"></th>
+              <th scope="col" colSpan="3">
+                &nbsp;
+              </th>
             </tr>
           </thead>
           <tbody>
-            {rows.map((record, index) =>
+            {rows.map((record, index) => (
               <Pet
-                key={index}
+                key={record.id}
                 indice={index + 1}
                 data={record}
                 deletePet={() => handleDelete(record)}
                 editPet={() => handleEdit(record)}
               />
-            )}
+            ))}
           </tbody>
         </table>
       </div>

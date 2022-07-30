@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import TableHeader from '../table/TableHeader'
+import TableFooter from '../table/TableFooter'
 import Loading from '../Loading'
 import Modal from '../Modal'
 import { getDebtors } from '../../services/customers'
 import { savePayment } from '../../services/accounts'
-import { Link } from 'react-router-dom'
-import { paymentMethods, setToday } from '../../services/utils'
+import { formatAmount, paymentMethods, setToday } from '../../helpers'
 
-const Debtors = () => {
+function Debtors() {
   const [filter, setFilter] = useState('')
   const paginationDefault = {
     curPage: 1,
@@ -23,24 +24,25 @@ const Debtors = () => {
   const [debtor, setDebtor] = useState({})
   const [form, setForm] = useState({ credit: 0, date: '' })
   const [error, setError] = useState('')
+  const [total, setTotal] = useState(0)
 
   useEffect(() => {
-
     const updateState = () => {
       setLoading(true)
       const pag = pagination
-      getDebtors(pagination)
-        .then(debtors => {
-          pag.totRecords = debtors.count.length
-          setPagination(pag)
-          setDebtors(debtors)
-          setLoading(false)
-        })
+      getDebtors(pagination).then((dbts) => {
+        pag.totRecords = dbts.count.length
+        const newTotal = dbts.rows.reduce((acc, dbt) => acc + dbt.balance, 0)
+        setTotal(newTotal)
+        setPagination(pag)
+        setDebtors(dbts)
+        setLoading(false)
+      })
     }
     updateState()
   }, [pagination])
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     setFilter(e.target.value)
     if (!e.target.value) setPagination({ ...pagination, filter: '' })
   }
@@ -50,16 +52,16 @@ const Debtors = () => {
     setPagination({ ...pagination, filter, curPage: 1 })
   }
 
-  const changePage = page => {
+  const changePage = (page) => {
     setPagination({ ...pagination, curPage: page })
   }
 
-  const registerPayment = (e, debtor) => {
+  const registerPayment = (e, dbt) => {
     e.preventDefault()
-    setDebtor(debtor)
+    setDebtor(dbt)
     setForm({
-      customerId: debtor.id,
-      balance: debtor.balance,
+      customerId: dbt.id,
+      balance: dbt.balance,
       credit: 0,
       paymentMethod: 0,
       date: setToday()
@@ -67,23 +69,23 @@ const Debtors = () => {
     setShowModal(!showModal)
   }
 
-  const toggleModal = e => {
+  const toggleModal = (e) => {
     e.preventDefault()
     setError('')
     setShowModal(!showModal)
   }
 
-  const handleChangeForm = (e => {
+  const handleChangeForm = (e) => {
     e.preventDefault()
     setError('')
-    let { id, value } = e.target
+    const { id, value } = e.target
     setForm({
       ...form,
       [id]: value
     })
-  })
+  }
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault()
     if (form.credit < 1) {
       setError('Importe pagado no puede ser 0')
@@ -99,18 +101,16 @@ const Debtors = () => {
       return
     }
 
-    savePayment(form)
-      .then(() => {
-        setLoading(true)
-        const pag = pagination
-        getDebtors(pagination)
-          .then(debtors => {
-            pag.totRecords = debtors.count.length
-            setPagination(pag)
-            setDebtors(debtors)
-            setLoading(false)
-          })
+    savePayment(form).then(() => {
+      setLoading(true)
+      const pag = pagination
+      getDebtors(pagination).then((dbts) => {
+        pag.totRecords = dbts.count.length
+        setPagination(pag)
+        setDebtors(dbts)
+        setLoading(false)
       })
+    })
 
     setShowModal(!showModal)
   }
@@ -118,52 +118,70 @@ const Debtors = () => {
   const totPages = Math.ceil(pagination.totRecords / pagination.limit)
   const { rows } = debtors
 
+  if (loading) {
+    return <Loading />
+  }
+
   return (
     <>
-      {loading && <Loading />}
-      {!loading &&
-        <div className="container-fluid">
-          <h3>Deudores</h3>
-          <TableHeader
-            handleChange={handleChange}
-            filter={filter}
-            handleClick={handleClick}
-            totPages={totPages}
-            pagination={pagination}
-            changePage={changePage}
-          />
-          <table className="table table-sm table-responsive">
-            <thead>
-              <tr>
-                <th scope="col">Nombre</th>
-                <th scope="col">Paciente</th>
-                <th scope="col">Domicilio</th>
-                <th scope="col">Teléfono</th>
-                <th scope="col" className="text-right">Deuda</th>
-                <th scope="col" style={{ minWidth: '120px' }} colSpan="2">
-                </th>
+      <div className="container-fluid">
+        <h3>Deudores</h3>
+        <TableHeader
+          handleChange={handleChange}
+          filter={filter}
+          handleClick={handleClick}
+          totPages={totPages}
+          pagination={pagination}
+          changePage={changePage}
+        />
+        <table className="table table-sm table-responsive">
+          <thead>
+            <tr>
+              <th scope="col">Nombre</th>
+              <th scope="col">Paciente</th>
+              <th scope="col">Domicilio</th>
+              <th scope="col">Teléfono</th>
+              <th scope="col" className="text-right">
+                Deuda
+              </th>
+              <th scope="col" style={{ minWidth: '120px' }} colSpan="2">
+                &nbsp;
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((dbt) => (
+              <tr key={dbt.id}>
+                <td className="name">
+                  <Link
+                    to={{
+                      pathname: `/clientes/${dbt.id}`,
+                      state: { from: '/deudores' }
+                    }}
+                  >
+                    {dbt.name}
+                  </Link>
+                </td>
+                <td>{dbt.pets.map((pet) => pet.name).join(', ')}</td>
+                <td>{dbt.address}</td>
+                <td>{dbt.phone}</td>
+                <td className="text-right">{formatAmount(dbt.balance)}</td>
+                <td className="text-right">
+                  <button
+                    type="button"
+                    className="btn btn-success"
+                    onClick={(e) => registerPayment(e, dbt)}
+                  >
+                    Registrar pago
+                  </button>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {rows
-                .map(debtor =>
-                  <tr key={debtor.id}>
-                    <td className="name">
-                      <Link to={{ pathname: `/clientes/${debtor.id}`, state: { from: '/deudores' } }}>{debtor.name}</Link>
-                    </td>
-                    <td>{debtor.pets.map(pet => pet.name).join(', ')}</td>
-                    <td>{debtor.address}</td>
-                    <td>{debtor.phone}</td>
-                    <td className="text-right">$ {debtor.balance.toFixed(2)}</td>
-                    <td className="text-right">
-                      <button className="btn btn-success" onClick={e => registerPayment(e, debtor)}>Registrar pago</button>
-                    </td>
-                  </tr>
-                )}
-            </tbody>
-          </table>
-        </div>
-      }
+            ))}
+          </tbody>
+          <TableFooter total={total} />
+        </table>
+      </div>
+
       <Modal
         show={showModal}
         toggleModal={toggleModal}
@@ -173,67 +191,78 @@ const Debtors = () => {
       >
         <div className="col-12 col-sm">
           <div className="form-group row">
-            <label htmlFor="amount" className="col-sm-5 col-form-label">Total adeudado</label>
-            <div className="col-sm-7">
-              <input
-                type="number"
-                className="form-control text-right"
-                readOnly={true}
-                id="amount"
-                onChange={e => handleChangeForm(e)}
-                value={parseFloat(form.balance).toFixed(2)}
-              />
-            </div>
+            <label htmlFor="amount" className="col-sm-5 col-form-label">
+              Total adeudado
+              <div className="col-sm-7">
+                <input
+                  type="number"
+                  className="form-control text-right"
+                  readOnly
+                  id="amount"
+                  onChange={(e) => handleChangeForm(e)}
+                  value={parseFloat(form.balance).toFixed(2)}
+                />
+              </div>
+            </label>
           </div>
         </div>
         <div className="col-12 col-sm">
           <div className="form-group row">
-            <label htmlFor="credit" className="col-sm-5 col-form-label">Importe a pagar</label>
-            <div className="col-sm-7">
-              <input
-                type="number"
-                className="form-control text-right"
-                id="credit"
-                onChange={e => handleChangeForm(e)}
-                value={parseFloat(form.credit)}
-              />
-            </div>
+            <label htmlFor="credit" className="col-sm-5 col-form-label">
+              Importe a pagar
+              <div className="col-sm-7">
+                <input
+                  type="number"
+                  className="form-control text-right"
+                  id="credit"
+                  onChange={(e) => handleChangeForm(e)}
+                  value={parseFloat(form.credit)}
+                />
+              </div>
+            </label>
           </div>
         </div>
         <div className="col-12 col-sm">
           <div className="form-group row">
-            <label htmlFor="paymentMethod" className="col-sm-5 col-form-label">Forma de pago</label>
-            <div className="col-sm-7">
-              <select className="form-control"
-                id="paymentMethod"
-                onChange={e => handleChangeForm(e)}
-                value={form.paymentMethod}
-              >
-                {
-                  paymentMethods.map(method => <option key={method.id} value={method.id} > {method.name}</option>)
-                }
-              </select>
-            </div>
+            <label htmlFor="paymentMethod" className="col-sm-5 col-form-label">
+              Forma de pago
+              <div className="col-sm-7">
+                <select
+                  className="form-control"
+                  id="paymentMethod"
+                  onChange={(e) => handleChangeForm(e)}
+                  value={form.paymentMethod}
+                >
+                  {paymentMethods.map((method) => (
+                    <option key={method.id} value={method.id}>
+                      {' '}
+                      {method.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </label>
           </div>
         </div>
         <div className="col-12 col-sm">
           <div className="form-group row">
-            <label htmlFor="date" className="col-sm-5 col-form-label">Fecha de pago</label>
-            <div className="col-sm-7">
-              <input
-                type="date"
-                className="form-control"
-                id="date"
-                onChange={e => handleChangeForm(e)}
-                value={form.date}
-              />
-            </div>
+            <label htmlFor="date" className="col-sm-5 col-form-label">
+              Fecha de pago
+              <div className="col-sm-7">
+                <input
+                  type="date"
+                  className="form-control"
+                  id="date"
+                  onChange={(e) => handleChangeForm(e)}
+                  value={form.date}
+                />
+              </div>
+            </label>
           </div>
         </div>
       </Modal>
     </>
   )
 }
-
 
 export default Debtors

@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from 'react'
+import { Redirect } from 'react-router-dom'
 import FormFooter from '../FormFooter'
 import FormActions from '../FormActions'
 import Checkbox from '../Checkbox'
 import { getPet } from '../../services/pets'
-import { Redirect } from 'react-router-dom'
 import { saveVaccination, getVaccination } from '../../services/vaccinations'
-import { vaccinesList } from '../../services/utils'
+import { vaccinesList } from '../../helpers'
 import './VaccinationForm.css'
 
-const VaccinationEdit = props => {
+function VaccinationEdit(props) {
   const [redirect, setRedirect] = useState('')
   const [error, setError] = useState('')
   const [pet, setPet] = useState({})
-  const vaccinesState = vaccinesList.map(vaccine => {
-    vaccine.checked = false
-    return vaccine
-  })
+  const vaccinesState = vaccinesList.map((vaccine) => ({
+    ...vaccine,
+    checked: false
+  }))
   const [form, setForm] = useState({
     id: '',
     customerId: '',
@@ -26,108 +26,120 @@ const VaccinationEdit = props => {
     vaccinesState
   })
 
-
   useEffect(() => {
-    getVaccination(props.match.params.vaccinationId)
-      .then(vaccination => {
-        const vaccinesUsed = vaccination.vaccination.split(', ')
-        const newVaccinesState = vaccinesState.map(vaccine => {
-          if (vaccinesUsed.find(name => name === vaccine.name)) {
-            vaccine = { ...vaccine, checked: true }
-          }
-          return vaccine
-        })
-        setForm({ ...vaccination, vaccinesState: newVaccinesState })
-        getPet(vaccination.petId)
-          .then(pet => setPet(pet))
-      })
+    const {
+      match: {
+        params: { id }
+      }
+    } = props || {}
+    getVaccination(id).then((vac) => {
+      const vaccinesUsed = vac.vaccination.split(', ')
+      const newVaccinesState = vaccinesState.map((vaccine) => ({
+        ...vaccine,
+        checked: Boolean(vaccinesUsed.find((name) => name === vaccine.name))
+      }))
+      setForm({ ...vac, vaccinesState: newVaccinesState })
+      getPet(vac.petId).then((newPet) => setPet(newPet))
+    })
     // eslint-disable-next-line
   }, [props.match.params.vaccinationId])
 
-  const handleChange = (e => {
+  const handleChange = (e) => {
     e.preventDefault()
-    error && setError(false)
-    let { id, value } = e.target
+    if (error) {
+      setError(false)
+    }
+    const { id, value } = e.target
     setForm({
       ...form,
       [id]: value
     })
-  })
+  }
 
-  const handleCheckbox = (e => {
-    error && setError(false)
+  const handleCheckbox = (e) => {
+    if (error) {
+      setError(false)
+    }
     const { id } = e.target
-    const { vaccinesState } = form
-    const newState = vaccinesState.map(vaccine => {
-      if (vaccine.id === parseInt(id)) {
-        const { checked } = vaccine
-        vaccine = { ...vaccine, checked: !checked }
-      }
-      return vaccine
-    })
+    const { vaccinesState: newVaccinesState } = form
+    const newState = newVaccinesState.map((vac) => ({
+      ...vac,
+      checked: vac.id === parseInt(id, 10) ? !vac.checked : vac.checked
+    }))
     setForm({
       ...form,
       vaccinesState: newState
     })
-  })
-
-  const handleSave = (e => {
-    e.preventDefault()
-    const vaccines = form.vaccinesState.filter(vaccine => vaccine.checked).map(vaccine => vaccine.name)
-    if (!vaccines.length) {
-      return setError('Debe seleccionar por lo menos una vacuna')
-    }
-    form.vaccination = vaccines.join(', ')
-    saveVaccination(form)
-      .then(() => goBack())
-      .catch(err => {
-        setError(err.response.data.error)
-      })
-  })
+  }
 
   const goBack = () => {
-    const { state } = props.location
-    setRedirect({ pathname: `${state.from}`, state: { current: 'vacunaciones' } })
+    const {
+      location: { state }
+    } = props || {}
+    setRedirect({
+      pathname: `${state?.from}`,
+      state: { current: 'vacunaciones' }
+    })
+  }
+
+  const handleSave = (e) => {
+    e.preventDefault()
+    const vac = form.vaccinesState
+      .filter((vaccine) => vaccine.checked)
+      .map((vaccine) => vaccine.name)
+    if (!vac.length) {
+      return setError('Debe seleccionar por lo menos una vacuna')
+    }
+    form.vaccination = vac.join(', ')
+    return saveVaccination(form)
+      .then(() => goBack())
+      .catch((err) => {
+        setError(err.response.data.error)
+      })
+  }
+  if (redirect) {
+    return <Redirect to={redirect} />
   }
 
   return (
-    <>
-      {redirect && <Redirect to={redirect} />}
-      <div className="container-fluid">
-        <div className="row">
-          <div className="container">
-            <h5 className="my-3">Editando Vacunación de {pet.name}</h5>
-            <form>
-
-              <div className="form-container card p-3 mb-3">
-                <div className="form-group row">
-                  <label htmlFor="vaccination" className="col-sm-2 col-form-label">Vacunas</label>
-                  <div className="col-sm-10">
-                    {vaccinesList.map(vaccine => <Checkbox
-                      key={vaccine.id}
-                      id={vaccine.id}
-                      label={vaccine.name}
+    <div className="container-fluid">
+      <div className="row">
+        <div className="container">
+          <h5 className="my-3">
+            Editando Vacunación de
+            {pet.name}
+          </h5>
+          <form>
+            <div className="form-container card p-3 mb-3">
+              <div className="form-group row">
+                <div className="col-sm-2 col-form-label">Vacunas</div>
+                <div className="col-sm-10">
+                  {vaccinesList.map((vac) => (
+                    <Checkbox
+                      key={vac.id}
+                      id={vac.id}
+                      label={vac.name}
                       handleChange={handleCheckbox}
-                      checked={form.vaccinesState.find(v => v.id === vaccine.id).checked}
-                    />)}
-                  </div>
+                      checked={
+                        form.vaccinesState.find((v) => v.id === vac.id).checked
+                      }
+                    />
+                  ))}
                 </div>
-
               </div>
+            </div>
 
-              <FormFooter form={form} handleChange={handleChange} />
+            <FormFooter form={form} handleChange={handleChange} />
 
-              <FormActions
-                doSave={e => handleSave(e)}
-                cancelSave={() => goBack()}
-                error={error}
-              />
-
-            </form>
-          </div>
+            <FormActions
+              doSave={(e) => handleSave(e)}
+              cancelSave={() => goBack()}
+              error={error}
+            />
+          </form>
         </div>
       </div>
-    </>
+    </div>
   )
 }
 

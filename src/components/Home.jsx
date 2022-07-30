@@ -1,14 +1,11 @@
 import React from 'react'
 import './Home.css'
 
-
-const Home = () => {
+function Home() {
   return (
     <div className="image">
       <div className="logo">
-        <h1 className="display-4">
-          Historias Clínicas
-        </h1>
+        <h1 className="display-4">Historias Clínicas</h1>
       </div>
     </div>
   )

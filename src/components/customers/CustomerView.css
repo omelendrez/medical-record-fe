@@ -11,32 +11,13 @@
   min-height: 50px;
 }
 
-.main-container .consultations .consultation .balance {
-  display: flex;
-  border: 1px solid #ccc;
-  flex-direction: column;
-  border-radius: 3px;
-  padding: 5px;
-}
-
-.main-container .consultations .consultation .balance.debt {
-  background-color: greenyellow;
-}
-.main-container .consultations .consultation .balance .amount-row {
-  display: flex;
-}
-
-.main-container .consultations .consultation .balance .amount-row .amount {
-  width: 100%;
-}
-
 .main-container .customer .observations,
 .main-container .pet .observations,
 .main-container .consultation .observations {
   font-style: italic;
 }
 
- .main-container .pets {
+.main-container .pets {
   padding: 10px;
   zoom: 1.5;
   margin-left: 10vw;
@@ -44,6 +25,37 @@
 
 .main-container .consultations .consultations-list {
   max-height: 84vh;
+}
+
+.main-container .consultations .consultations-list .balance {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 10px;
+}
+
+.main-container .consultations .consultations-list .balance-row {
+  display: flex;
+  width: 20ch;
+}
+
+.main-container .consultations .consultations-list .balance-row .balance-label {
+  width: 20ch;
+  text-align: left;
+}
+
+.main-container .consultations .consultations-list .balance-row .balance-amount {
+  text-align: right;
+  width: 20ch;
+}
+
+
+.balance-row-red {
+  color: red;
+}
+
+.balance-row-green {
+  color: green;
 }
 
 .main-container .pets .pets-header {

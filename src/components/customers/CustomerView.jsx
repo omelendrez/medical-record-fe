@@ -1,18 +1,19 @@
-import React, { useState, useEffect } from "react"
-import { Redirect } from "react-router-dom"
-import Customer from "./customer-view/Customer"
-import Consultations from "./customer-view/Consultations"
-import { getCustomer, getDebt } from "../../services/customers"
-import { getPet } from "../../services/pets"
-import { readOnly } from "../../services/utils"
-import "./CustomerView.css"
+import React, { useState, useEffect } from 'react'
+import PropTypes from 'prop-types'
+import { Redirect } from 'react-router-dom'
+import Customer from './customer-view/Customer'
+import Consultations from './customer-view/Consultations'
+import { getCustomer, getDebt } from '../../services/customers'
+import { getPet } from '../../services/pets'
+import { readOnly } from '../../helpers'
+import './CustomerView.css'
 
-const TabItem = ({ option, title, current, setCurrent }) => {
+function TabItem({ option, title, current, setCurrent, className }) {
   return (
-    <li className="nav-item">
+    <li className={`nav-item ${className}`}>
       <a
         href="/"
-        className={`nav-link ${option === current ? "active" : ""}`}
+        className={`nav-link ${option === current ? 'active' : ''}`}
         onClick={(e) => {
           e.preventDefault()
           setCurrent(option)
@@ -24,82 +25,86 @@ const TabItem = ({ option, title, current, setCurrent }) => {
   )
 }
 
-const CustomerView = (props) => {
-  const [redirect, setRedirect] = useState("")
+function CustomerView(props) {
+  const [redirect, setRedirect] = useState('')
   const [customer, setCustomer] = useState({ pets: [] })
   const [pet, setPet] = useState({})
   const [debt, setDebt] = useState({})
-  const { state } = props.location
-  const [current, setCurrent] = useState("consultas")
+  const {
+    location: { state },
+    match: {
+      params: { petId, id }
+    }
+  } = props || {}
+  const [current, setCurrent] = useState('consultas')
 
   const setBack = () => {
     if (state) return setRedirect(state.from)
     setPet({})
-    if (!props.match.params.petId) {
-      setRedirect(`/clientes`)
-    } else {
-      setRedirect(`/clientes/${customer.id}`)
+    if (!petId) {
+      return setRedirect('/clientes')
     }
+    return setRedirect(`/clientes/${customer.id}`)
   }
 
-  const loadPet = (pet) => {
-    setRedirect(`/clientes/${customer.id}/${pet.id}`)
+  const loadPet = (p) => {
+    setRedirect(`/clientes/${customer.id}/${p.id}`)
+  }
+
+  const selectPet = (p) => {
+    getPet(p.id).then((newPet) => setPet(newPet))
   }
 
   useEffect(() => {
-    if (props.location.state && props.location.state.current) {
-      setCurrent(props.location.state.current)
+    if (state && state.current) {
+      setCurrent(state.current)
     } else {
-      setCurrent("consultas")
+      setCurrent('consultas')
     }
 
-    getCustomer(props.match.params.id).then((customer) => {
-      setCustomer(customer)
-      const pet = { id: props.match.params.petId }
-      if (props.match.params.petId) {
-        selectPet(pet)
+    getCustomer(id).then((cust) => {
+      setCustomer(cust)
+      const p = { id: petId }
+      if (petId) {
+        selectPet(p)
       }
     })
   }, [props])
 
   useEffect(() => {
-    getDebt(props.match.params.id).then((debt) => setDebt(debt))
-  }, [props.match.params.id])
+    getDebt(id).then((dbt) => setDebt(dbt))
+  }, [id])
 
-  const handleAddConsultation = (e) => {
+  const handleAddConsultation = () => {
     setRedirect({
       pathname: `/nueva-consulta/${customer.id}/${pet.id}`,
       state: {
-        from: `/clientes/${customer.id}/${pet.id}`,
-      },
+        from: `/clientes/${customer.id}/${pet.id}`
+      }
     })
   }
 
-  const handleAddVaccination = (e) => {
+  const handleAddVaccination = () => {
     setRedirect({
       pathname: `/nueva-vacunacion/${customer.id}/${pet.id}`,
       state: {
-        from: `/clientes/${customer.id}/${pet.id}`,
-      },
+        from: `/clientes/${customer.id}/${pet.id}`
+      }
     })
   }
 
-  const handleAddDeworming = (e) => {
+  const handleAddDeworming = () => {
     setRedirect({
       pathname: `/nueva-desparasitacion/${customer.id}/${pet.id}`,
       state: {
-        from: `/clientes/${customer.id}/${pet.id}`,
-      },
+        from: `/clientes/${customer.id}/${pet.id}`
+      }
     })
   }
 
   const handleAddPet = (e) => {
     e.preventDefault()
     setRedirect(`/nuevo-paciente/${customer.id}`)
-  }
-
-  const selectPet = (pet) => {
-    getPet(pet.id).then((pet) => setPet(pet))
   }
 
   return (
@@ -116,37 +121,38 @@ const CustomerView = (props) => {
           current={current}
         />
         {pet.id && (
-          <div className="m-1 w-100 ">
+          <div className="m-1 w-100">
             <div className="d-flex justify-content-between">
               <ul className="nav nav-tabs">
                 <TabItem
-                  option={"consultas"}
-                  title={"Consultas"}
+                  option="consultas"
+                  title="Consultas"
                   current={current}
                   setCurrent={setCurrent}
                 />
                 <TabItem
-                  option={"vacunaciones"}
-                  title={"Vacunaciones"}
+                  option="vacunaciones"
+                  title="Vacunaciones"
                   current={current}
                   setCurrent={setCurrent}
                 />
                 <TabItem
-                  option={"desparasitaciones"}
-                  title={"Desparasitaciones"}
+                  option="desparasitaciones"
+                  title="Desparasitaciones"
                   current={current}
                   setCurrent={setCurrent}
                 />
                 <TabItem
-                  option={"descarga-historial-medico"}
-                  title={"Historial Clínico"}
+                  className="d-none d-sm-block"
+                  option="descarga-historial-medico"
+                  title="Historial Clínico"
                   current={current}
                   setCurrent={setCurrent}
                 />
               </ul>
               {!readOnly() && (
                 <div className="flex-last">
-                  {current === "consultas" && (
+                  {current === 'consultas' && (
                     <button
                       type="button"
                       className="btn btn-primary btn-block"
@@ -155,7 +161,7 @@ const CustomerView = (props) => {
                       + Consulta
                     </button>
                   )}
-                  {current === "vacunaciones" && (
+                  {current === 'vacunaciones' && (
                     <button
                       type="button"
                       className="btn btn-primary btn-block"
@@ -164,7 +170,7 @@ const CustomerView = (props) => {
                       + Vacunación
                     </button>
                   )}
-                  {current === "desparasitaciones" && (
+                  {current === 'desparasitaciones' && (
                     <button
                       type="button"
                       className="btn btn-primary btn-block"
@@ -184,6 +190,14 @@ const CustomerView = (props) => {
       </div>
     </>
   )
+}
+
+TabItem.propTypes = {
+  option: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  current: PropTypes.string.isRequired,
+  setCurrent: PropTypes.func.isRequired,
+  className: PropTypes.string.isRequired
 }
 
 export default CustomerView

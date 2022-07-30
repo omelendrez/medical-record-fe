@@ -1,18 +1,20 @@
-import React, { useEffect, useState, useCallback } from "react"
-import NavLink from "./NavLink"
-import { logout, getUser, readOnly } from "../services/utils"
+import React, { useEffect, useState, useCallback } from 'react'
+import NavLink from './NavLink'
+import { logout, getUser, readOnly } from '../helpers'
 
-const Navbar = () => {
+function Navbar() {
   const [user, setUser] = useState({})
   const [isSmallDevice, setIsSmallDevice] = useState(false)
   const disabled = readOnly()
 
+  const windowResize = () => setIsSmallDevice(window.innerWidth < 768)
+
   useEffect(() => {
     setUser(getUser())
     window.onresize = windowResize
-    return () => (
+    return () => {
       window.onresize = null
-    )
+    }
   }, [])
 
   const handleLogout = useCallback((e) => {
@@ -20,29 +22,27 @@ const Navbar = () => {
     logout()
   }, [])
 
-  const windowResize = () => setIsSmallDevice(window.innerWidth < 768)
-
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <button
         className="navbar-toggler collapsed"
         type="button"
-        data-toggle={isSmallDevice ? "collapse" : undefined}
+        data-toggle={isSmallDevice ? 'collapse' : undefined}
         data-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent"
         aria-expanded="false"
         aria-label="Toggle navigation"
       >
-        <span className="navbar-toggler-icon"></span>
+        <span className="navbar-toggler-icon" />
       </button>
       <div className="collapse navbar-collapse" id="navbarSupportedContent">
         <ul
           className="navbar-nav mr-auto"
-          data-toggle={isSmallDevice ? "collapse" : undefined}
+          data-toggle={isSmallDevice ? 'collapse' : undefined}
           data-target="#navbarSupportedContent"
         >
           <NavLink to="/">Home</NavLink>
-          <div className="dropdown-divider"></div>
+          <div className="dropdown-divider" />
           <NavLink to="/turnos">Turnos</NavLink>
           <NavLink to="/clientes">Clientes</NavLink>
           <NavLink to="/pacientes">Pacientes</NavLink>
@@ -53,6 +53,7 @@ const Navbar = () => {
         </ul>
         <div className="text-white mr-2 text-capitalize">{user.name}</div>
         <button
+          type="button"
           className="btn btn-warning btn-sm"
           onClick={(e) => handleLogout(e)}
         >
