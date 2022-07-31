@@ -29,9 +29,11 @@ export const getVaccinationsByPet = async (id) => {
 
 export const saveVaccination = (vaccination) => {
   const userId = getUser().id
+  const url = vaccination.id ? `vaccinations/${vaccination.id}` : 'vaccinations'
+  const payload = { ...vaccination, userId, id: undefined }
   return new Promise((resolve, reject) => {
     http
-      .post('vaccinations', { ...vaccination, userId })
+      .post(url, payload)
       .then((response) => {
         resolve(response.data)
       })

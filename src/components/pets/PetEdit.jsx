@@ -19,16 +19,7 @@ function PetForm(props) {
   const [back, setBack] = useState(false)
   const [error, setError] = useState('')
 
-  const [form, setForm] = useState({
-    customerId: '',
-    name: '',
-    type: '',
-    breed: '',
-    observations: '',
-    sex: '',
-    birthDate: '',
-    weight: ''
-  })
+  const [form, setForm] = useState({})
 
   useEffect(() => {
     getPet(id).then((pet) => setForm(pet))
@@ -106,7 +97,7 @@ function PetForm(props) {
                       type="text"
                       className="form-control"
                       id="name"
-                      onChange={(e) => handleChange(e)}
+                      onChange={handleChange}
                       value={form.name}
                       required
                     />
@@ -119,7 +110,7 @@ function PetForm(props) {
                       type="text"
                       className="form-control"
                       id="type"
-                      onChange={(e) => handleChange(e)}
+                      onChange={handleChange}
                       value={form.type}
                       required
                     />
@@ -134,7 +125,7 @@ function PetForm(props) {
                       type="text"
                       className="form-control"
                       id="breed"
-                      onChange={(e) => handleChange(e)}
+                      onChange={handleChange}
                       value={form.breed}
                       required
                     />
@@ -146,7 +137,7 @@ function PetForm(props) {
                     <select
                       className="form-control"
                       id="sex"
-                      onChange={(e) => handleChange(e)}
+                      onChange={handleChange}
                       value={form.sex}
                     >
                       {sexList.map((sex) => (
@@ -166,7 +157,7 @@ function PetForm(props) {
                       type="text"
                       className="form-control"
                       id="weight"
-                      onChange={(e) => handleChange(e)}
+                      onChange={handleChange}
                       value={form.weight}
                       required
                     />
@@ -179,8 +170,8 @@ function PetForm(props) {
                       type="date"
                       className="form-control"
                       id="birthDate"
-                      onChange={(e) => handleChange(e)}
-                      value={form.birthDate}
+                      onChange={handleChange}
+                      value={form.birthDate || ''}
                       required
                     />
                   </div>
@@ -193,7 +184,7 @@ function PetForm(props) {
                       id="years"
                       className="form-control"
                       value={form.years}
-                      onChange={(e) => handleYearsChange(e)}
+                      onChange={handleYearsChange}
                     />
                   </div>
                 </div>
@@ -205,7 +196,7 @@ function PetForm(props) {
                       id="months"
                       className="form-control"
                       value={form.months}
-                      onChange={(e) => handleMonthsChange(e)}
+                      onChange={handleMonthsChange}
                     />
                   </div>
                 </div>
@@ -218,7 +209,7 @@ function PetForm(props) {
                       id="days"
                       className="form-control"
                       value={form.days}
-                      onChange={(e) => handleDaysChange(e)}
+                      onChange={handleDaysChange}
                     />
                   </div>
                 </div>
@@ -229,13 +220,13 @@ function PetForm(props) {
                 <textarea
                   className="form-control"
                   id="observations"
-                  onChange={(e) => handleChange(e)}
+                  onChange={handleChange}
                   value={form.observations}
                 />
               </div>
 
               <FormActions
-                doSave={(e) => handleSave(e)}
+                doSave={handleSave}
                 cancelSave={() => setBack(true)}
                 error={error}
               />

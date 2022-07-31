@@ -21,10 +21,14 @@ function PetForm(props) {
     customerId: id,
     name: '',
     type: '',
-    sex: '',
     breed: '',
-    observations: '',
-    days: ''
+    sex: '',
+    weight: '',
+    birthDate: '',
+    years: '',
+    months: '',
+    days: '',
+    observations: ''
   })
 
   const handleChange = (e) => {
@@ -100,7 +104,7 @@ function PetForm(props) {
                     type="text"
                     className="form-control"
                     id="name"
-                    onChange={(e) => handleChange(e)}
+                    onChange={handleChange}
                     value={form.name}
                     required
                   />
@@ -113,7 +117,7 @@ function PetForm(props) {
                     type="text"
                     className="form-control"
                     id="type"
-                    onChange={(e) => handleChange(e)}
+                    onChange={handleChange}
                     value={form.type}
                     required
                   />
@@ -128,7 +132,7 @@ function PetForm(props) {
                     type="text"
                     className="form-control"
                     id="breed"
-                    onChange={(e) => handleChange(e)}
+                    onChange={handleChange}
                     value={form.breed}
                     required
                   />
@@ -140,7 +144,7 @@ function PetForm(props) {
                   <select
                     className="form-control"
                     id="sex"
-                    onChange={(e) => handleChange(e)}
+                    onChange={handleChange}
                     value={form.sex}
                   >
                     {sexList.map((sex) => (
@@ -160,7 +164,7 @@ function PetForm(props) {
                     type="text"
                     className="form-control"
                     id="weight"
-                    onChange={(e) => handleChange(e)}
+                    onChange={handleChange}
                     value={form.weight}
                     required
                   />
@@ -173,7 +177,7 @@ function PetForm(props) {
                     type="date"
                     className="form-control"
                     id="birthDate"
-                    onChange={(e) => handleChange(e)}
+                    onChange={handleChange}
                     value={form.birthDate}
                     required
                   />
@@ -187,7 +191,7 @@ function PetForm(props) {
                     id="years"
                     className="form-control"
                     value={form.years}
-                    onChange={(e) => handleYearsChange(e)}
+                    onChange={handleYearsChange}
                   />
                 </div>
               </div>
@@ -199,7 +203,7 @@ function PetForm(props) {
                     id="months"
                     className="form-control"
                     value={form.months}
-                    onChange={(e) => handleMonthsChange(e)}
+                    onChange={handleMonthsChange}
                   />
                 </div>
               </div>
@@ -211,7 +215,7 @@ function PetForm(props) {
                     id="days"
                     className="form-control"
                     value={form.days}
-                    onChange={(e) => handleDaysChange(e)}
+                    onChange={handleDaysChange}
                   />
                 </div>
               </div>
@@ -221,7 +225,7 @@ function PetForm(props) {
               <textarea
                 className="form-control"
                 id="observations"
-                onChange={(e) => handleChange(e)}
+                onChange={handleChange}
                 value={form.observations}
               />
             </div>

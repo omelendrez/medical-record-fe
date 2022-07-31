@@ -24,9 +24,11 @@ export const getPet = async (id) => {
 
 export const savePet = (pet) => {
   const userId = getUser().id
+  const url = pet.id ? `pets/${pet.id}` : 'pets'
+  const payload = { ...pet, userId, id: undefined }
   return new Promise((resolve, reject) => {
     http
-      .post('pets', { ...pet, userId })
+      .post(url, payload)
       .then((response) => {
         resolve(response.data)
       })

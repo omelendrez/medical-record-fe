@@ -29,9 +29,11 @@ export const getDewormingsByPet = async (id) => {
 
 export const saveDeworming = (deworming) => {
   const userId = getUser().id
+  const url = deworming.id ? `dewormings/${deworming.id}` : 'dewormings'
+  const payload = { ...deworming, userId, id: undefined }
   return new Promise((resolve, reject) => {
     http
-      .post('dewormings', { ...deworming, userId })
+      .post(url, payload)
       .then((response) => {
         resolve(response.data)
       })

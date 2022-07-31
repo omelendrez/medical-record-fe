@@ -34,9 +34,11 @@ export const getDebt = async (id) => {
 
 export const saveCustomer = (customer) => {
   const userId = getUser().id
+  const url = customer.id ? `customers/${customer.id}` : 'customers'
+  const payload = { ...customer, userId, id: undefined }
   return new Promise((resolve, reject) => {
     http
-      .post('customers', { ...customer, userId })
+      .post(url, payload)
       .then((response) => {
         resolve(response.data)
       })

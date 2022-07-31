@@ -30,7 +30,7 @@ function CustomerForm(props) {
   const handleChange = (e) => {
     e.preventDefault()
     if (error) {
-      setError(false)
+      setError('')
     }
     setForm({
       ...form,
