@@ -5,8 +5,7 @@
   "private": true,
   "author": "Omar Melendrez <omar.melendrez@gmail.com>",
   "engines": {
-    "node": ">=16.13.2",
-    "npm": ">=8.1.2"
+    "node": "16.x"
   },
   "repository": {
     "type": "git",
