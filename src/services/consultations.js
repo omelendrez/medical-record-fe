@@ -29,9 +29,13 @@ export const getConsultationsByPet = async (id) => {
 
 export const saveConsultation = (consultation) => {
   const userId = getUser().id
+  const url = consultation.id
+    ? `consultations/${consultation.id}`
+    : 'consultations'
+  const payload = { ...consultation, userId, id: undefined }
   return new Promise((resolve, reject) => {
     http
-      .post('consultations', { ...consultation, userId })
+      .post(url, payload)
       .then((response) => {
         resolve(response.data)
       })
