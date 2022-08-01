@@ -22,6 +22,13 @@ export const getProgrammedVisits = async () => {
   return response.data.dewormings
 }
 
+export const getProgrammedVisitsByPeriod = async (startDate, endDate) => {
+  const response = await http.get(
+    `dewormings/programmed-visits-by-period?startDate=${startDate}&endDate=${endDate}`
+  )
+  return response.data.dewormings
+}
+
 export const getDewormingsByPet = async (id) => {
   const response = await http.get(`dewormings/by-pet/${id}`)
   return response.data.dewormings
