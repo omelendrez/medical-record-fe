@@ -22,6 +22,13 @@ export const getProgrammedVisits = async () => {
   return response.data.vaccinations
 }
 
+export const getProgrammedVisitsByPeriod = async (startDate, endDate) => {
+  const response = await http.get(
+    `vaccinations/programmed-visits-by-period?startDate=${startDate}&endDate=${endDate}`
+  )
+  return response.data.vaccinations
+}
+
 export const getVaccinationsByPet = async (id) => {
   const response = await http.get(`vaccinations/by-pet/${id}`)
   return response.data.vaccinations

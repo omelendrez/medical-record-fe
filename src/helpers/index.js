@@ -24,6 +24,31 @@ import {
 } from '../services/vaccinations'
 import 'moment/locale/es'
 
+export const daysNames = [
+  'Lunes',
+  'Martes',
+  'Miércoles',
+  'Jueves',
+  'Viernes',
+  'Sábado',
+  'Domingo'
+]
+
+export const monthNames = [
+  'Enero',
+  'Febrero',
+  'Marzo',
+  'Abril',
+  'Mayo',
+  'Junio',
+  'Julio',
+  'Agosto',
+  'Septiembre',
+  'Octubre',
+  'Noviembre',
+  'Diciembre'
+]
+
 export const fieldsDefault = {
   clientes: {
     fields: [
@@ -191,6 +216,9 @@ export const formatDate = (date) => moment(date).add(3, 'hour').format('L')
 export const formatDateFull = (dateTime) => moment(dateTime).format('l LT')
 
 export const setToday = () => moment(new Date()).format('YYYY-MM-DD')
+
+export const formatDateYMD = (date) =>
+  moment(new Date(date)).format('YYYY-MM-DD')
 
 export const formatDateExtended = (dateTime) => moment(dateTime).format('LLLL')
 
