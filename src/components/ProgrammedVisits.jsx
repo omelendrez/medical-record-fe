@@ -7,6 +7,9 @@ function ProgrammedVisits({ appointments }) {
   return (
     <div className="container">
       <h3>Visitas Programadas</h3>
+      <Link to="/calendario" className="btn btn-primary">
+        Ver calendario
+      </Link>
       <table className="table table-sm table-responsive">
         <tbody>
           {appointments.map((appointment) => {

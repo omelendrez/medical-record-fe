@@ -20,6 +20,7 @@ import Vaccinations from './components/vaccinations/Vaccinations'
 import VaccinationAdd from './components/vaccinations/VaccinationAdd'
 import VaccinationEdit from './components/vaccinations/VaccinationEdit'
 import Restore from './components/Restore'
+import Calendar from './components/Calendar'
 import Appointments from './components/Appointments'
 
 function Routes() {
@@ -65,6 +66,7 @@ function Routes() {
         exact
         component={VaccinationAdd}
       />
+      <Route path="/calendario" exact component={Calendar} />
       <Route path="/turnos" exact component={Appointments} />
     </Switch>
   )
