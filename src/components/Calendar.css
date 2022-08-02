@@ -1,115 +1,121 @@
-div {
-  list-style-type: none;
+/**
+ * ALL the UI design credit goes to:
+ * https://www.sketchappsources.com/free-source/2676-calendar-template-sketch-freebie-resource.html
+ */
+
+
+
+/* COSMETIC STYLING */
+
+:root {
+  --red: #ED5454;
 }
 
-/* Month header */
-.month {
-  padding: 5px 25px;
-  width: 100%;
-  background: #1769aa;
-  text-align: center;
-}
-
-/* Month list */
-.month div {
-  margin: 0;
-  padding: 0;
-}
-
-.month div div {
-  color: white;
-  font-size: 20px;
-  text-transform: uppercase;
-  letter-spacing: 3px;
-}
-
-/* Previous button inside month header */
-.month .prev {
-  float: left;
-  vertical-align: middle;
-  cursor: pointer;
-}
-
-/* Next button */
-.month .next {
-  float: right;
-  vertical-align: middle;
-  cursor: pointer;
-}
-
-/* Weekdays (Mon-Sun) */
-.weekdays {
-  padding: 5px 0;
-  background-color: #ddd;
-  padding-left: 20px;
-}
-
-.weekdays div {
-  display: inline-block;
-  width: 14%;
-  color: #666;
-  text-align: center;
-}
-
-/* Days (1-31) */
-.days {
-  padding: 5px 0;
-  padding-left: 20px;
-}
-
-.days div {
-  display: inline-flex;
-  width: 14%;
-  height: 100px;
-  border: 1px solid #ccc;
-  background-color: #fafafa;
-  flex-direction: column;
-}
-
-/* Highlight the "current" day */
-.days div.active {
-  background: #2196f3;
-  color: white !important
-}
-
-.days div.active .date {
+.calendar {
   background-color: white;
-  color: #1abc9c;
+  border: 1px solid #e1e1e1;
+  position: relative;
 }
 
-
-.days .not-current-month {
-  color: #aaa;
+.month {
+  display: flex;
+  justify-content: space-around;
+  align-content: center;
+  background-color: #1769aa;
+  color: #fff;
+  padding: 10px;
+  font-size: 24px;
+  text-transform: uppercase;
 }
 
-.days .not-current-month .date {
-  background-color: #ccc;
+.month .prev {
+  cursor: pointer;
 }
 
-.days .date {
-  border: 0;
+.month .next {
+  cursor: pointer;
 }
 
-.days div.event {
-  white-space: nowrap;
-  font-size: 12px;
-  border: 0;
-  background-color: transparent;
-  border: 0 !important;
-  padding-left: 6px;
-  width: 100%;
-  display: inline;
-  height: auto;
+.calendar__header>div {
+  text-transform: uppercase;
+  font-size: 0.8em;
+  font-weight: bold;
 }
 
-.days div .date {
+.calendar__week,
+.calendar__header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.calendar__week {
+  grid-auto-rows: 160px;
+}
+
+.calendar__header {
+  grid-auto-rows: 50px;
+  align-items: center;
+  text-align: center;
+}
+
+.calendar__header .next {
   float: right;
+}
+
+.calendar__day {
+  padding: 6px;
+  border-right: 1px solid #e1e1e1;
+  border-top: 1px solid #e1e1e1;
+  overflow: auto;
+}
+
+.calendar__day .event {
+  font-size: 13px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.calendar__day .date {
+  float: right;
+  height: 30px;
+  width: 30px;
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 50%;
-  background-color: #2196f3;
-  width: 40px;
-  height: 40px;
-  color: white;
+  background-color: #1769aa;
+  color: #fff;
+}
+
+.calendar__day span {
+  color: #1769aa;
+  vertical-align: middle;
+  font-size: large;
+  margin-right: 6px;
+}
+
+.calendar__day.day.not-current-month {
+  background-color: #e1e1e1;
+}
+
+.calendar__day.day.not-current-month .date {
+  background-color: transparent;
+  border: 1px solid #1769aa;
+  color: #1769aa;
+}
+
+.calendar__day.active {
+  background-color: #B3E5FC;
+}
+
+.calendar__day:last-child {
+  border-right: 0;
+}
+
+.back-to-turnos {
+  position: absolute;
+  border: 1px solid #fff;
+  top: 6px;
+  left: 6px;
 }
