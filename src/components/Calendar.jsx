@@ -8,6 +8,9 @@ import Loading from './Loading'
 import { formatDateYMD, daysNames, monthNames } from '../helpers'
 import './Calendar.css'
 
+const sortEventsByCustomerName = (a, b) =>
+  a.customerName.localeCompare(b.customerName)
+
 const TYPES = {
   UP: 'up',
   DOWN: 'down'
@@ -15,7 +18,7 @@ const TYPES = {
 
 function Weekdays() {
   return (
-    <div className="weekdays">
+    <div className="calendar__header">
       {daysNames.map((day) => (
         <div key={day}>{day}</div>
       ))}
@@ -57,16 +60,14 @@ function reducer(state, action) {
 function Header({ year, month, onChangeMonth }) {
   return (
     <div className="month">
+      <div className="prev" onClick={() => onChangeMonth(TYPES.DOWN)}>
+        &#10094;
+      </div>
       <div>
-        <div className="prev" onClick={() => onChangeMonth(TYPES.DOWN)}>
-          &#10094;
-        </div>
-        <div className="next" onClick={() => onChangeMonth(TYPES.UP)}>
-          &#10095;
-        </div>
-        <div>
-          {monthNames[month]} <span style={{ fontSize: '18px' }}>{year}</span>
-        </div>
+        {monthNames[month]} <span style={{ fontSize: '18px' }}>{year}</span>
+      </div>
+      <div className="next" onClick={() => onChangeMonth(TYPES.UP)}>
+        &#10095;
       </div>
     </div>
   )
@@ -75,34 +76,28 @@ function Header({ year, month, onChangeMonth }) {
 function Days({ month, days, events }) {
   if (!days.length && !events.length) return null
   return (
-    <div className="days">
+    <div className="calendar__week">
       {days.map((d) => {
         const date = formatDateYMD(
           new Date(`${d.date.year}-${d.date.month + 1}-${d.date.day}`)
         )
         const eventsByDate = events.filter((e) => e.nextAppointment === date)
-        let componentClass = ''
+        let componentClass = 'calendar__day day'
         if (d.date.month !== month) {
-          componentClass = 'not-current-month'
+          componentClass = 'calendar__day day not-current-month'
         }
         if (d.isToday) {
-          componentClass = 'active'
+          componentClass = 'calendar__day day active'
         }
         return (
           <div key={`${d.date.day}-${d.date.month}`} className={componentClass}>
             <div className="date">{d.date.day}</div>
-            {eventsByDate.length > 0 && (
-              <div className="event">{eventsByDate.length} turnos</div>
-            )}
-            {eventsByDate.map((e, index) => {
-              if (index > 2) return null
-              return (
-                <div key={`${e.id}-${e.type}`} className="event" title={d.type}>
-                  <span className="icon">{e.icon}</span>{' '}
-                  {e.petName.toUpperCase()}-{e.customerName.toUpperCase()}
-                </div>
-              )
-            })}
+            {eventsByDate.map((e) => (
+              <div key={`${e.customerName}-${e.type}`} className="event">
+                {e.icon}
+                {e.customerName.toUpperCase()}
+              </div>
+            ))}
           </div>
         )
       })}
@@ -149,34 +144,69 @@ function Calendar() {
 
   useEffect(() => {
     const getEvents = async () => {
+      const eventsList = []
       const consultations = await getConsultations(startDate, endDate)
-      const newConsultations = consultations.rows.map((c) => ({
-        id: c.id,
-        customerName: c.customerName,
-        petName: c.petName,
-        nextAppointment: c.nextAppointment,
-        type: 'Consulta',
-        icon: '🩺'
-      }))
+      consultations.rows.forEach((c) => {
+        if (
+          !eventsList.find(
+            (e) => e.customerName === c.customerName && e.type === 'C'
+          )
+        ) {
+          const event = {
+            customerName: c.customerName,
+            nextAppointment: c.nextAppointment,
+            type: 'C',
+            icon: (
+              <span className="material-icons" title="Consulta">
+                access_time
+              </span>
+            )
+          }
+          eventsList.push(event)
+        }
+      })
       const vaccionations = await getVaccinations(startDate, endDate)
-      const newVaccinations = vaccionations.rows.map((c) => ({
-        id: c.id,
-        customerName: c.customerName,
-        petName: c.petName,
-        nextAppointment: c.nextAppointment,
-        type: 'Vacuna',
-        icon: '💉'
-      }))
+      vaccionations.rows.forEach((c) => {
+        if (
+          !eventsList.find(
+            (e) => e.customerName === c.customerName && e.type === 'V'
+          )
+        ) {
+          const event = {
+            customerName: c.customerName,
+            nextAppointment: c.nextAppointment,
+            type: 'V',
+            icon: (
+              <span className="material-icons" title="Vacuna">
+                vaccines
+              </span>
+            )
+          }
+          eventsList.push(event)
+        }
+      })
       const dewormings = await getDewormings(startDate, endDate)
-      const newDewormings = dewormings.rows.map((c) => ({
-        id: c.id,
-        customerName: c.customerName,
-        petName: c.petName,
-        nextAppointment: c.nextAppointment,
-        type: 'Desparasitación',
-        icon: '🐛'
-      }))
-      setEvents([...newConsultations, ...newVaccinations, ...newDewormings])
+      dewormings.rows.forEach((c) => {
+        if (
+          !eventsList.find(
+            (e) => e.customerName === c.customerName && e.type === 'D'
+          )
+        ) {
+          const event = {
+            customerName: c.customerName,
+            nextAppointment: c.nextAppointment,
+            type: 'D',
+            icon: (
+              <span className="material-icons" title="Desparasitación">
+                coronavirus
+              </span>
+            )
+          }
+          eventsList.push(event)
+        }
+      })
+      const sortedEvents = eventsList.sort(sortEventsByCustomerName)
+      setEvents(sortedEvents)
     }
     getEvents()
   }, [startDate, endDate])
@@ -186,13 +216,13 @@ function Calendar() {
   }
 
   return (
-    <div className="container-fluid mb-3">
+    <div className="calendar">
+      <Link to="/turnos" className="btn btn-primary back-to-turnos">
+        Volver a Turnos
+      </Link>
       <Header year={year} month={month} onChangeMonth={handleChangeMonth} />
       <Weekdays />
       <Days days={days} month={month} events={events} />
-      <Link to="/turnos" className="btn btn-primary">
-        Volver a Turnos
-      </Link>
     </div>
   )
 }
