@@ -88,9 +88,9 @@
   justify-content: center;
   align-items: center;
   border-radius: 50%;
-  background-color: transparent;
+  background-color: var(--blue);
   border: 1px solid var(--blue);
-  color: var(--blue);
+  color: #fff;
 }
 
 .calendar__day span {
@@ -119,6 +119,10 @@
 
 .calendar__day:last-child {
   border-right: 0;
+}
+
+.material-icons {
+  cursor: pointer;
 }
 
 .back-to-turnos {

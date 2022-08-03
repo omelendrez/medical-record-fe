@@ -93,9 +93,12 @@ function Days({ month, days, events }) {
           <div key={`${d.date.day}-${d.date.month}`} className={componentClass}>
             <div className="date">{d.date.day}</div>
             {eventsByDate.map((e) => (
-              <div key={`${e.customerName}-${e.type}`} className="event">
+              <div
+                key={`${e.customerName}-${e.type}-${e.id}`}
+                className="event"
+              >
                 {e.icon}
-                {e.customerName.toUpperCase()}
+                {e.customerName.toUpperCase()} - {e.petName.toUpperCase()}
               </div>
             ))}
           </div>
@@ -147,63 +150,51 @@ function Calendar() {
       const eventsList = []
       const consultations = await getConsultations(startDate, endDate)
       consultations.rows.forEach((c) => {
-        if (
-          !eventsList.find(
-            (e) => e.customerName === c.customerName && e.type === 'C'
+        const event = {
+          id: c.id,
+          petName: c.petName,
+          customerName: c.customerName,
+          nextAppointment: c.nextAppointment,
+          type: 'C',
+          icon: (
+            <span className="material-icons" title="Consulta">
+              access_time
+            </span>
           )
-        ) {
-          const event = {
-            customerName: c.customerName,
-            nextAppointment: c.nextAppointment,
-            type: 'C',
-            icon: (
-              <span className="material-icons" title="Consulta">
-                access_time
-              </span>
-            )
-          }
-          eventsList.push(event)
         }
+        eventsList.push(event)
       })
       const vaccionations = await getVaccinations(startDate, endDate)
       vaccionations.rows.forEach((c) => {
-        if (
-          !eventsList.find(
-            (e) => e.customerName === c.customerName && e.type === 'V'
+        const event = {
+          id: c.id,
+          petName: c.petName,
+          customerName: c.customerName,
+          nextAppointment: c.nextAppointment,
+          type: 'V',
+          icon: (
+            <span className="material-icons" title="Vacuna">
+              vaccines
+            </span>
           )
-        ) {
-          const event = {
-            customerName: c.customerName,
-            nextAppointment: c.nextAppointment,
-            type: 'V',
-            icon: (
-              <span className="material-icons" title="Vacuna">
-                vaccines
-              </span>
-            )
-          }
-          eventsList.push(event)
         }
+        eventsList.push(event)
       })
       const dewormings = await getDewormings(startDate, endDate)
       dewormings.rows.forEach((c) => {
-        if (
-          !eventsList.find(
-            (e) => e.customerName === c.customerName && e.type === 'D'
+        const event = {
+          id: c.id,
+          petName: c.petName,
+          customerName: c.customerName,
+          nextAppointment: c.nextAppointment,
+          type: 'D',
+          icon: (
+            <span className="material-icons" title="Desparasitación">
+              coronavirus
+            </span>
           )
-        ) {
-          const event = {
-            customerName: c.customerName,
-            nextAppointment: c.nextAppointment,
-            type: 'D',
-            icon: (
-              <span className="material-icons" title="Desparasitación">
-                coronavirus
-              </span>
-            )
-          }
-          eventsList.push(event)
         }
+        eventsList.push(event)
       })
       const sortedEvents = eventsList.sort(sortEventsByCustomerName)
       setEvents(sortedEvents)
