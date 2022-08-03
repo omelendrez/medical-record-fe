@@ -136,7 +136,8 @@ export const vaccinesList = [
   { id: 2, name: 'Quíntuple' },
   { id: 3, name: 'Séxtuple' },
   { id: 4, name: 'Puppy DP' },
-  { id: 5, name: 'Antirrábica' }
+  { id: 5, name: 'Antirrábica' },
+  { id: 6, name: 'Leptospirosis' }
 ]
 export const treatmentStage = [
   { id: 1, name: 'Inicio' },
