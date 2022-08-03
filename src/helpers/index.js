@@ -25,13 +25,13 @@ import {
 import 'moment/locale/es'
 
 export const daysNames = [
+  'Domingo',
   'Lunes',
   'Martes',
   'Miércoles',
   'Jueves',
   'Viernes',
-  'Sábado',
-  'Domingo'
+  'Sábado'
 ]
 
 export const monthNames = [
