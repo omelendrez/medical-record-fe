@@ -16,6 +16,7 @@ function Consultation({ consultation, editConsultation, deleteConsultation }) {
     clinicalExamination,
     diagnosis,
     treatment,
+    additionalExams,
     nextAppointment,
     amount,
     paid,
@@ -53,6 +54,11 @@ function Consultation({ consultation, editConsultation, deleteConsultation }) {
         {treatment && (
           <p className="card-text">
             <b>Tratamiento</b>: {treatment}
+          </p>
+        )}
+        {additionalExams && (
+          <p className="card-text">
+            <b>Estudios complementarios</b>: {additionalExams}
           </p>
         )}
         {vaccination && (
@@ -106,6 +112,7 @@ Consultation.propTypes = {
     clinicalExamination: PropTypes.string,
     diagnosis: PropTypes.string,
     treatment: PropTypes.string,
+    additionalExams: PropTypes.string,
     nextAppointment: PropTypes.string,
     amount: PropTypes.number,
     paid: PropTypes.number,

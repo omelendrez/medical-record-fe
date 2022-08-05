@@ -164,6 +164,11 @@ function PDFDocument({ records, pet, customer }) {
                   {`Diagnostico: ${record.diagnosis}`}
                 </Text>
               )}
+              {Boolean(record.additionalExams) && (
+                <Text style={styles.line}>
+                  {`Exámenes complementarios: ${record.additionalExams}`}
+                </Text>
+              )}
               {Boolean(record.treatment) && (
                 <Text style={styles.line}>
                   {`Tratamiento: ${record.treatment}`}

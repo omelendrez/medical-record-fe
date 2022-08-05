@@ -8,7 +8,7 @@ import { treatmentStage, setToday } from '../../helpers'
 import FormActions from '../FormActions'
 import './ConsultationForm.css'
 
-function ConsultationForm(props) {
+function ConsultationAdd(props) {
   const {
     location: { state },
     match: {
@@ -26,6 +26,7 @@ function ConsultationForm(props) {
     diagnosis: '',
     treatment: '',
     treatmentStage: 1,
+    additionalExams: '',
     nextAppointment: '',
     amount: '0.00'
   })
@@ -80,7 +81,7 @@ function ConsultationForm(props) {
                     id="anamnesis"
                     onChange={(e) => handleChange(e)}
                     value={form.anamnesis}
-                    rows="1"
+                    rows="3"
                   />
                 </div>
               </div>
@@ -97,7 +98,7 @@ function ConsultationForm(props) {
                     id="clinicalExamination"
                     onChange={(e) => handleChange(e)}
                     value={form.clinicalExamination}
-                    rows="1"
+                    rows="3"
                   />
                 </div>
               </div>
@@ -111,7 +112,7 @@ function ConsultationForm(props) {
                     id="diagnosis"
                     onChange={(e) => handleChange(e)}
                     value={form.diagnosis}
-                    rows="1"
+                    rows="3"
                   />
                 </div>
               </div>
@@ -125,7 +126,24 @@ function ConsultationForm(props) {
                     id="treatment"
                     onChange={(e) => handleChange(e)}
                     value={form.treatment}
-                    rows="2"
+                    rows="3"
+                  />
+                </div>
+              </div>
+              <div className="form-group row">
+                <label
+                  htmlFor="additionalExams"
+                  className="col-sm-2 col-form-label"
+                >
+                  Exámenes complementarios
+                </label>
+                <div className="col-sm-10">
+                  <textarea
+                    className="form-control"
+                    id="additionalExams"
+                    onChange={(e) => handleChange(e)}
+                    value={form.additionalExams}
+                    rows="3"
                   />
                 </div>
               </div>
@@ -167,4 +185,4 @@ function ConsultationForm(props) {
   )
 }
 
-export default ConsultationForm
+export default ConsultationAdd
