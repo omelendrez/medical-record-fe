@@ -3,7 +3,6 @@ import { Redirect } from 'react-router-dom'
 import Consultation from './Consultation'
 import TableHeader from '../table/TableHeader'
 import Confirm from '../Confirm'
-import Loading from '../Loading'
 import {
   getConsultations,
   deleteConsultation
@@ -23,17 +22,14 @@ function Consultations() {
   const [selected, setSelected] = useState({})
   const [redirect, setRedirect] = useState('')
   const [pagination, setPagination] = useState(paginationDefault)
-  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const updateState = () => {
-      setLoading(true)
       const pag = pagination
       getConsultations(pagination).then((cons) => {
         pag.totRecords = cons.count
         setPagination(pag)
         setConsultations(cons)
-        setLoading(false)
       })
     }
     updateState()
@@ -82,8 +78,6 @@ function Consultations() {
 
   const { rows } = consultations
   const totPages = Math.ceil(pagination.totRecords / pagination.limit)
-
-  if (loading) return <Loading />
 
   return (
     <>

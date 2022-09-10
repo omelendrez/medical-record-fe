@@ -3,7 +3,6 @@ import { Redirect } from 'react-router-dom'
 import Deworming from './Deworming'
 import TableHeader from '../table/TableHeader'
 import Confirm from '../Confirm'
-import Loading from '../Loading'
 import { getDewormings, deleteDeworming } from '../../services/dewormings'
 
 function Dewormings() {
@@ -20,17 +19,14 @@ function Dewormings() {
   const [selected, setSelected] = useState({})
   const [redirect, setRedirect] = useState('')
   const [pagination, setPagination] = useState(paginationDefault)
-  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const updateState = () => {
-      setLoading(true)
       const pag = pagination
       getDewormings(pagination).then((deworms) => {
         pag.totRecords = deworms.count
         setPagination(pag)
         setDewormings(deworms)
-        setLoading(false)
       })
     }
     updateState()
@@ -79,8 +75,6 @@ function Dewormings() {
 
   const { rows } = dewormings
   const totPages = Math.ceil(pagination.totRecords / pagination.limit)
-
-  if (loading) return <Loading />
 
   return (
     <>

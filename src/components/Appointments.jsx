@@ -1,52 +1,86 @@
 import React, { useEffect, useState } from 'react'
-import { getProgrammedVisits as con } from '../services/consultations'
-import { getProgrammedVisits as vac } from '../services/vaccinations'
-import { getProgrammedVisits as dew } from '../services/dewormings'
-import ProgrammedVisits from './ProgrammedVisits'
-import Loading from './Loading'
+import { Link } from 'react-router-dom'
+import { getAppointments } from '../services/appointments'
+import TableHeader from './table/TableHeader'
+import { formatDate } from '../helpers'
 
 function Appointments() {
-  const [appointments, setAppointments] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [filter, setFilter] = useState('')
+  const paginationDefault = {
+    curPage: 1,
+    totRecords: 0,
+    limit: 15,
+    filter
+  }
 
-  const updateData = (data, type) =>
-    data.rows.map((item) => {
-      const newItem = { ...item, type }
-      return newItem
-    })
+  const [pagination, setPagination] = useState(paginationDefault)
+  const [appointments, setAppointments] = useState([])
+
+  const changePage = (page) => {
+    setPagination({ ...pagination, curPage: page })
+  }
+
+  const handleChange = (e) => {
+    setFilter(e.target.value)
+    if (!e.target.value) setPagination({ ...pagination, filter: '' })
+  }
+
+  const handleClick = (e) => {
+    e.preventDefault()
+    setPagination({ ...pagination, filter, curPage: 1 })
+  }
 
   useEffect(() => {
-    setLoading(true)
-    const updateState = async () => {
-      let records = []
+    const pag = pagination
+    getAppointments(pagination).then((app) => {
+      pag.totRecords = app.count
+      setPagination(pag)
+      setAppointments(app.rows)
+    })
+  }, [pagination])
 
-      let data = await con()
-      records = [...records, ...updateData(data, 'Consulta')]
-
-      data = await vac()
-      records = [...records, ...updateData(data, 'Vacunación')]
-
-      data = await dew()
-      records = [...records, ...updateData(data, 'Desparasitación')]
-
-      records.sort((a, b) => {
-        if (a.nextAppointment > b.nextAppointment) return 1
-        if (a.nextAppointment < b.nextAppointment) return -1
-        return 0
-      })
-
-      setAppointments(records)
-      setLoading(false)
-    }
-    updateState()
-  }, [])
-
-  if (loading) return <Loading />
+  const totPages = Math.ceil(pagination.totRecords / pagination.limit)
 
   return (
-    <div className="programmed-visits">
+    <div className="container-fluid">
+      <h3>Turnos</h3>
+      <TableHeader
+        handleChange={handleChange}
+        filter={filter}
+        handleClick={handleClick}
+        totPages={totPages}
+        pagination={pagination}
+        changePage={changePage}
+        handleRestore={() => {}}
+      />
+      <div className=" d-none d-md-block mb-3">
+        <Link to="/calendario" className="btn btn-primary">
+          Ver calendario
+        </Link>
+      </div>
+
       {appointments.length > 0 && (
-        <ProgrammedVisits appointments={appointments} />
+        <table className="table table-sm table-responsive">
+          <tbody>
+            {appointments.map((a) => (
+              <tr key={`${a.id}${a.type}`}>
+                <td>{a.type}</td>
+                <td>{formatDate(a.nextAppointment)}</td>
+                <td className="name">
+                  <Link
+                    to={{
+                      pathname: `/clientes/${a.customerId}/${a.petId}`,
+                      state: { current: a.type, from: '/' }
+                    }}
+                  >
+                    {a.petName}
+                  </Link>
+                </td>
+                <td>{a.customerName}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       )}
     </div>
   )

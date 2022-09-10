@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import TableHeader from '../table/TableHeader'
 import TableFooter from '../table/TableFooter'
-import Loading from '../Loading'
 import Modal from '../Modal'
 import { getDebtors } from '../../services/customers'
 import { savePayment } from '../../services/accounts'
@@ -19,7 +18,6 @@ function Debtors() {
 
   const [debtors, setDebtors] = useState({ rows: [] })
   const [pagination, setPagination] = useState(paginationDefault)
-  const [loading, setLoading] = useState(true)
   const [showModal, setShowModal] = useState(false)
   const [debtor, setDebtor] = useState({})
   const [form, setForm] = useState({ credit: 0, date: '' })
@@ -28,7 +26,6 @@ function Debtors() {
 
   useEffect(() => {
     const updateState = () => {
-      setLoading(true)
       const pag = pagination
       getDebtors(pagination).then((dbts) => {
         pag.totRecords = dbts.count.length
@@ -36,7 +33,6 @@ function Debtors() {
         setTotal(newTotal)
         setPagination(pag)
         setDebtors(dbts)
-        setLoading(false)
       })
     }
     updateState()
@@ -102,13 +98,11 @@ function Debtors() {
     }
 
     savePayment(form).then(() => {
-      setLoading(true)
       const pag = pagination
       getDebtors(pagination).then((dbts) => {
         pag.totRecords = dbts.count.length
         setPagination(pag)
         setDebtors(dbts)
-        setLoading(false)
       })
     })
 
@@ -117,10 +111,6 @@ function Debtors() {
 
   const totPages = Math.ceil(pagination.totRecords / pagination.limit)
   const { rows } = debtors
-
-  if (loading) {
-    return <Loading />
-  }
 
   return (
     <>

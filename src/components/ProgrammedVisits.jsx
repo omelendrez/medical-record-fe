@@ -14,48 +14,23 @@ function ProgrammedVisits({ appointments }) {
       </div>
       <table className="table table-sm table-responsive">
         <tbody>
-          {appointments.map((appointment) => {
-            const {
-              customerId,
-              petId,
-              customerName,
-              petName,
-              nextAppointment,
-              type
-            } = appointment
-            let redirect = {}
-            switch (type) {
-              case 'Consulta':
-                redirect = {
-                  pathname: `/clientes/${customerId}/${petId}`,
-                  state: { current: 'consultas', from: '/' }
-                }
-                break
-              case 'Vacunación':
-                redirect = {
-                  pathname: `/clientes/${customerId}/${petId}`,
-                  state: { current: 'vacunaciones', from: '/' }
-                }
-                break
-              case 'Desparasitación':
-                redirect = {
-                  pathname: `/clientes/${customerId}/${petId}`,
-                  state: { current: 'desparasitaciones', from: '/' }
-                }
-                break
-              default:
-            }
-            return (
-              <tr key={appointment.id}>
-                <td>{type}</td>
-                <td>{formatDate(nextAppointment)}</td>
-                <td className="name">
-                  <Link to={redirect}>{petName}</Link>
-                </td>
-                <td>{customerName}</td>
-              </tr>
-            )
-          })}
+          {appointments.map((a) => (
+            <tr key={`${a.id}${a.type}`}>
+              <td>{a.type}</td>
+              <td>{formatDate(a.nextAppointment)}</td>
+              <td className="name">
+                <Link
+                  to={{
+                    pathname: `/clientes/${a.customerId}/${a.petId}`,
+                    state: { current: a.type, from: '/' }
+                  }}
+                >
+                  {a.petName}
+                </Link>
+              </td>
+              <td>{a.customerName}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>
