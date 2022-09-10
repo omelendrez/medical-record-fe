@@ -9,9 +9,9 @@ function Pet({ pet }) {
   return (
     <div className="card pet">
       <div className="card-body">
-        <h5 className="card-title">{name}</h5>
-        <h6 className="card-subtitle mb-2 text-muted">{type}</h6>
-        <h6 className="card-subtitle mb-2 text-muted">{breed}</h6>
+        <h5 className="card-title text-uppercase">{name}</h5>
+        <h6 className="card-subtitle mb-2 text-muted text-capitalize">{type}</h6>
+        <h6 className="card-subtitle mb-2 text-muted text-capitalize">{breed}</h6>
         <h6 className="card-subtitle mb-2 text-muted">{getSexName(sex)}</h6>
         <h6 className="card-subtitle mb-2 text-muted">{weight}</h6>
         <h6 className="card-subtitle mb-2 text-muted">{getAge(birthDate)}</h6>

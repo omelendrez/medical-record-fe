@@ -142,7 +142,7 @@ function Debtors() {
           <tbody>
             {rows.map((dbt) => (
               <tr key={dbt.id}>
-                <td className="name">
+                <td className="name text-uppercase">
                   <Link
                     to={{
                       pathname: `/clientes/${dbt.id}`,
@@ -152,7 +152,9 @@ function Debtors() {
                     {dbt.name}
                   </Link>
                 </td>
-                <td>{dbt.pets.map((pet) => pet.name).join(', ')}</td>
+                <td className="text-uppercase">
+                  {dbt.pets.map((pet) => pet.name).join(', ')}
+                </td>
                 <td>{dbt.address}</td>
                 <td>{dbt.phone}</td>
                 <td className="text-right">{formatAmount(dbt.balance)}</td>

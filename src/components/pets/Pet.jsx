@@ -20,7 +20,7 @@ function Pet({ data, deletePet, editPet }) {
   } = data
   return (
     <tr>
-      <td className="name">
+      <td className="name text-uppercase">
         <Link
           to={{
             pathname: `/clientes/${customerId}/${id}`,
@@ -30,9 +30,9 @@ function Pet({ data, deletePet, editPet }) {
           {name}
         </Link>
       </td>
-      <td className="customer-row">{customerName}</td>
-      <td>{type}</td>
-      <td>{breed}</td>
+      <td className="customer-row text-uppercase">{customerName}</td>
+      <td className="text-capitalize">{type}</td>
+      <td className="text-capitalize">{breed}</td>
       <td>{getSexName(sex)}</td>
       <td>{getAge(birthDate)}</td>
       <td className="text-center text-capitalize small">

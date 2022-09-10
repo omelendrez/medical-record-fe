@@ -12,11 +12,11 @@ function Customer({ data, deleteCustomer, editCustomer }) {
 
   return (
     <tr>
-      <td className="name">
+      <td className="name text-uppercase">
         <Link to={`/clientes/${id}`}>{name}</Link>
       </td>
       <td>
-        <div className="pet-list">{petsList.join(', ')}</div>
+        <div className="pet-list text-uppercase">{petsList.join(', ')}</div>
       </td>
       <td>{address}</td>
       <td>{phone}</td>

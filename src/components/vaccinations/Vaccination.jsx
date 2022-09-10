@@ -20,7 +20,7 @@ function Vaccination({ data, deleteVaccination, editVaccination }) {
   return (
     <tr>
       <td className="text-nowrap">{formatDate(date)}</td>
-      <td>
+      <td className="text-uppercase">
         <Link
           to={{
             pathname: `/clientes/${customerId}/${petId}`,
@@ -30,7 +30,7 @@ function Vaccination({ data, deleteVaccination, editVaccination }) {
           {petName}
         </Link>
       </td>
-      <td>{customerName}</td>
+      <td className="text-uppercase">{customerName}</td>
       <td>{vaccination}</td>
       <td className="text-nowrap">
         {nextAppointment ? formatDate(nextAppointment) : ''}

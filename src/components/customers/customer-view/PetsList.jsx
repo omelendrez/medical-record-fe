@@ -17,7 +17,8 @@ function PetsList({ pet, pets, loadPet, handleAddPet }) {
                   p.statusId === 1 ? 'info' : 'danger'
                 } btn-block`}
               >
-                {`${p.name} (${p.statusId === 1 ? 'activo' : 'inactivo'})`}
+                <span className="text-uppercase">{p.name} </span>
+                {`(${p.statusId === 1 ? 'activo' : 'inactivo'})`}
               </button>
             </li>
           ))}

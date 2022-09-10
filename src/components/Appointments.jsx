@@ -51,7 +51,6 @@ function Appointments() {
         totPages={totPages}
         pagination={pagination}
         changePage={changePage}
-        handleRestore={() => {}}
       />
       <div className=" d-none d-md-block mb-3">
         <Link to="/calendario" className="btn btn-primary">
@@ -64,9 +63,9 @@ function Appointments() {
           <tbody>
             {appointments.map((a) => (
               <tr key={`${a.id}${a.type}`}>
-                <td>{a.type}</td>
+                <td className="text-capitalize">{a.type}</td>
                 <td>{formatDate(a.nextAppointment)}</td>
-                <td className="name">
+                <td className="name text-uppercase">
                   <Link
                     to={{
                       pathname: `/clientes/${a.customerId}/${a.petId}`,
@@ -76,7 +75,7 @@ function Appointments() {
                     {a.petName}
                   </Link>
                 </td>
-                <td>{a.customerName}</td>
+                <td className="text-uppercase">{a.customerName}</td>
               </tr>
             ))}
           </tbody>

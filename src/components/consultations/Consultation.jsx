@@ -21,7 +21,7 @@ function Consultation({ data, deleteConsultation, editConsultation }) {
   return (
     <tr>
       <td className="text-nowrap">{formatDate(date)}</td>
-      <td>
+      <td className="text-uppercase">
         <Link
           to={{
             pathname: `/clientes/${customerId}/${petId}`,
@@ -31,7 +31,7 @@ function Consultation({ data, deleteConsultation, editConsultation }) {
           {petName}
         </Link>
       </td>
-      <td>{customerName}</td>
+      <td className="text-uppercase">{customerName}</td>
       <td>{diagnosis}</td>
       <td>{getTreatmentStage(treatmentStage)}</td>
       <td className="text-nowrap">

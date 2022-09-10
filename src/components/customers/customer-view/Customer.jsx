@@ -13,7 +13,7 @@ function Customer({ customer, pet, handleAddPet, loadPet, setBack, debt }) {
       <div className="text-center d-none d-md-block">
         <div className="card customer">
           <div className="card-body">
-            <h5 className="card-title">{name}</h5>
+            <h5 className="card-title text-uppercase">{name}</h5>
             <h6 className="card-subtitle mb-2 text-muted">{address}</h6>
             <h6 className="card-subtitle mb-2 text-muted">{phone}</h6>
             <h6 className="card-subtitle mb-2 text-muted">{email}</h6>

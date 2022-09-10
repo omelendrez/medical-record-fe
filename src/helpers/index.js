@@ -209,8 +209,10 @@ export const getApointmentFromDays = (days, date) => {
 
 export const formatNumber = (amount) => parseFloat(amount).toFixed(2)
 
-export const getAge = (birthDate) =>
-  moment(birthDate).toNow().replace('en ', '')
+export const getAge = (birthDate) => {
+  const results = moment(birthDate).toNow().replace('en ', '')
+  return results === 'Fecha inválida' ? '' : results
+}
 
 export const formatDate = (date) => moment(date).add(3, 'hour').format('L')
 

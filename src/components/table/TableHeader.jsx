@@ -54,11 +54,15 @@ export default function TableHeader({
   )
 }
 
+TableHeader.defaultProps = {
+  handleRestore: null
+}
+
 TableHeader.propTypes = {
   handleChange: PropTypes.func.isRequired,
   filter: PropTypes.string.isRequired,
   handleClick: PropTypes.func.isRequired,
   pagination: PropTypes.instanceOf(Object).isRequired,
   changePage: PropTypes.func.isRequired,
-  handleRestore: PropTypes.func.isRequired
+  handleRestore: PropTypes.func
 }
