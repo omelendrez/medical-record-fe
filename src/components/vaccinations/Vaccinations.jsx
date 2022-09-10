@@ -3,7 +3,6 @@ import { Redirect } from 'react-router-dom'
 import Vaccination from './Vaccination'
 import TableHeader from '../table/TableHeader'
 import Confirm from '../Confirm'
-import Loading from '../Loading'
 import { getVaccinations, deleteVaccination } from '../../services/vaccinations'
 
 function Vaccinations() {
@@ -20,17 +19,14 @@ function Vaccinations() {
   const [selected, setSelected] = useState({})
   const [redirect, setRedirect] = useState('')
   const [pagination, setPagination] = useState(paginationDefault)
-  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const updateState = () => {
-      setLoading(true)
       const pag = pagination
       getVaccinations(pagination).then((vac) => {
         pag.totRecords = vac.count
         setPagination(pag)
         setVaccinations(vac)
-        setLoading(false)
       })
     }
     updateState()
@@ -78,8 +74,6 @@ function Vaccinations() {
 
   const { rows } = vaccinations
   const totPages = Math.ceil(pagination.totRecords / pagination.limit)
-
-  if (loading) return <Loading />
 
   return (
     <>

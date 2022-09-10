@@ -3,7 +3,6 @@ import { Redirect } from 'react-router-dom'
 import Pet from './Pet'
 import Confirm from '../Confirm'
 import TableHeader from '../table/TableHeader'
-import Loading from '../Loading'
 import { getPets, deletePet } from '../../services/pets'
 
 function Pets() {
@@ -21,17 +20,14 @@ function Pets() {
   const [selected, setSelected] = useState({})
   const [redirect, setRedirect] = useState('')
   const [pagination, setPagination] = useState(paginationDefault)
-  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const updateState = () => {
-      setLoading(true)
       const pag = pagination
       getPets(pagination).then((petsList) => {
         pag.totRecords = petsList.count
         setPagination(pag)
         setPets(petsList)
-        setLoading(false)
       })
     }
     updateState()
@@ -75,8 +71,6 @@ function Pets() {
 
   const { rows } = pets
   const totPages = Math.ceil(pagination.totRecords / pagination.limit)
-
-  if (loading) return <Loading />
 
   return (
     <>

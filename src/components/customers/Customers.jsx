@@ -3,7 +3,6 @@ import { Redirect } from 'react-router-dom'
 import Customer from './Customer'
 import Confirm from '../Confirm'
 import TableHeader from '../table/TableHeader'
-import Loading from '../Loading'
 import { getCustomers, deleteCustomer } from '../../services/customers'
 import { readOnly } from '../../helpers'
 
@@ -21,17 +20,14 @@ function Customers() {
   const [selected, setSelected] = useState({})
   const [redirect, setRedirect] = useState('')
   const [pagination, setPagination] = useState(paginationDefault)
-  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const updateState = () => {
-      setLoading(true)
       const pag = pagination
       getCustomers(pagination).then((custs) => {
         pag.totRecords = custs.count
         setPagination(pag)
         setCustomers(custs)
-        setLoading(false)
       })
     }
     updateState()
@@ -79,8 +75,6 @@ function Customers() {
 
   const { rows } = customers
   const totPages = Math.ceil(pagination.totRecords / pagination.limit)
-
-  if (loading) return <Loading />
 
   return (
     <>
