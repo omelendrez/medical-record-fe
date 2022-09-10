@@ -103,21 +103,11 @@ function Customers() {
         <table className="table table-sm table-responsive">
           <thead>
             <tr>
-              <th scope="col" style={{ width: '250px' }}>
-                Nombre
-              </th>
-              <th scope="col" style={{ width: '250px' }}>
-                Paciente
-              </th>
-              <th scope="col" style={{ width: '400px' }}>
-                Domicilio
-              </th>
-              <th scope="col" style={{ width: '400px' }}>
-                Teléfono
-              </th>
-              <th scope="col" style={{ width: '100px' }}>
-                Observaciones
-              </th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Paciente</th>
+              <th scope="col">Domicilio</th>
+              <th scope="col">Teléfono</th>
+              <th scope="col">Observaciones</th>
               <th scope="col" colSpan="3">
                 {!readOnly() && (
                   <button
