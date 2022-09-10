@@ -101,7 +101,7 @@ function PDFDocument({ records, pet, customer }) {
         </View>
         <View style={{ ...styles.header, flexDirection: 'row' }}>
           <View style={styles.section}>
-            <Text style={styles.name}>{`Paciente: ${petName}`}</Text>
+            <Text style={styles.name}>{`Paciente: ${petName.toUpperCase()}`}</Text>
             {Boolean(birthDate) && (
               <Text>
                 {`Fecha de nacimiento: ${formatDate(birthDate)} (${getAge(
@@ -122,7 +122,7 @@ function PDFDocument({ records, pet, customer }) {
             <Text
               style={{ ...styles.name, ...styles.capitalize, color: '#000' }}
             >
-              {`Cliente: ${customerName}`}
+              {`Cliente: ${customerName.toUpperCase()}`}
             </Text>
             {Boolean(address) && (
               <Text style={styles.capitalize}>{`Domicilio: ${address}`}</Text>

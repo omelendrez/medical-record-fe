@@ -14,7 +14,12 @@
 .main-container .customer .observations,
 .main-container .pet .observations,
 .main-container .consultation .observations {
-  font-style: italic;
+  margin-top: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 1rem;
+  color:rgb(2, 72, 202);
+  text-align: left;
 }
 
 .main-container .pets {
