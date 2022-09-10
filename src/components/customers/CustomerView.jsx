@@ -192,12 +192,16 @@ function CustomerView(props) {
   )
 }
 
+TabItem.defaultProps = {
+  className: ''
+}
+
 TabItem.propTypes = {
   option: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   current: PropTypes.string.isRequired,
   setCurrent: PropTypes.func.isRequired,
-  className: PropTypes.string.isRequired
+  className: PropTypes.string
 }
 
 export default CustomerView
