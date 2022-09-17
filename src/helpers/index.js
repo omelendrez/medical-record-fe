@@ -141,7 +141,10 @@ export const getAge = (birthDate) => {
   return results === 'Fecha inválida' ? '' : results
 }
 
-export const formatDate = (date) => moment(date).add(3, 'hour').format('L')
+export const formatDate = (date) => {
+  const results = moment(date).add(3, 'hour').format('L')
+  return results === 'Fecha inválida' ? '' : results
+}
 
 export const formatDateFull = (dateTime) => moment(dateTime).format('l LT')
 
