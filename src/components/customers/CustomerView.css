@@ -14,12 +14,8 @@
 .main-container .customer .observations,
 .main-container .pet .observations,
 .main-container .consultation .observations {
-  margin-top: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  padding: 1rem;
-  color:rgb(2, 72, 202);
-  text-align: left;
+  font-weight: 700;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .main-container .pets {

@@ -18,9 +18,13 @@ function Balance({ amount, paid }) {
   )
 }
 
+Balance.defaultProps = {
+  paid: 0
+}
+
 Balance.propTypes = {
   amount: PropTypes.number.isRequired,
-  paid: PropTypes.number.isRequired
+  paid: PropTypes.number
 }
 
 export default Balance
