@@ -80,7 +80,9 @@ function Restore(props) {
               <tr key={record.id}>
                 {fields.map((field) => (
                   <td key={field.name} className={field.className || null}>
-                    {record[field.name]}
+                    {field.format
+                      ? field.format(record[field.name])
+                      : record[field.name]}
                   </td>
                 ))}
                 <td>

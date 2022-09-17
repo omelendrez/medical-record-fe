@@ -49,79 +49,6 @@ export const monthNames = [
   'Diciembre'
 ]
 
-export const fieldsDefault = {
-  clientes: {
-    fields: [
-      { name: 'name', title: 'Nombre' },
-      { name: 'address', title: 'Domicilio' },
-      { name: 'phone', title: 'Teléfono' },
-      { name: 'email', title: 'Email' },
-      { name: 'observations', title: 'Observaciones' }
-    ],
-    getRecords: getInactiveCustomers,
-    restoreRecord: restoreCustomer,
-    deleteRecord: destroyCustomer
-  },
-  pacientes: {
-    fields: [
-      { name: 'name', title: 'Nombre' },
-      { name: 'type', title: 'Tipo' },
-      { name: 'breed', title: 'Raza' },
-      { name: 'sex', title: 'Sexo' },
-      { name: 'observations', title: 'Observaciones' }
-    ],
-    getRecords: getInactivePets,
-    restoreRecord: restorePet,
-    deleteRecord: destroyPet
-  },
-  vacunaciones: {
-    fields: [
-      { name: 'date', title: 'Fecha', className: 'text-nowrap' },
-      { name: 'petName', title: 'Paciente' },
-      { name: 'vaccination', title: 'Desparasitación' },
-      {
-        name: 'nextAppointment',
-        title: 'Próx. Turno',
-        className: 'text-nowrap'
-      }
-    ],
-    getRecords: getInactiveVaccinations,
-    restoreRecord: restoreVaccination,
-    deleteRecord: destroyVaccination
-  },
-  consultas: {
-    fields: [
-      { name: 'date', title: 'Fecha', className: 'text-nowrap' },
-      { name: 'petName', title: 'Paciente' },
-      { name: 'diagnosis', title: 'Diagnóstico' },
-      { name: 'treatment', title: 'Tratamiento' },
-      {
-        name: 'nextAppointment',
-        title: 'Próx. Turno',
-        className: 'text-nowrap'
-      }
-    ],
-    getRecords: getInactiveConsultations,
-    restoreRecord: restoreConsultation,
-    deleteRecord: destroyConsultation
-  },
-  desparasitaciones: {
-    fields: [
-      { name: 'date', title: 'Fecha', className: 'text-nowrap' },
-      { name: 'petName', title: 'Paciente' },
-      { name: 'deworming', title: 'Desparasitación' },
-      {
-        name: 'nextAppointment',
-        title: 'Próx. Turno',
-        className: 'text-nowrap'
-      }
-    ],
-    getRecords: getInactiveDewormings,
-    restoreRecord: restoreDeworming,
-    deleteRecord: destroyDeworming
-  }
-}
-
 export const paymentMethods = [
   { id: 0, name: 'N/A' },
   { id: 1, name: 'Efectivo' },
@@ -249,6 +176,82 @@ export const getUser = () => JSON.parse(localStorage.getItem('user'))
 export const readOnly = () => {
   const user = JSON.parse(localStorage.getItem('user'))
   return user.name.toLocaleLowerCase() === 'visitante'
+}
+
+export const fieldsDefault = {
+  clientes: {
+    fields: [
+      { name: 'name', title: 'Nombre' },
+      { name: 'address', title: 'Domicilio' },
+      { name: 'phone', title: 'Teléfono' },
+      { name: 'email', title: 'Email' },
+      { name: 'observations', title: 'Observaciones' }
+    ],
+    getRecords: getInactiveCustomers,
+    restoreRecord: restoreCustomer,
+    deleteRecord: destroyCustomer
+  },
+  pacientes: {
+    fields: [
+      { name: 'name', title: 'Nombre' },
+      { name: 'type', title: 'Tipo' },
+      { name: 'breed', title: 'Raza' },
+      { name: 'sex', title: 'Sexo' },
+      { name: 'observations', title: 'Observaciones' }
+    ],
+    getRecords: getInactivePets,
+    restoreRecord: restorePet,
+    deleteRecord: destroyPet
+  },
+  vacunaciones: {
+    fields: [
+      { name: 'date', title: 'Fecha', className: 'text-nowrap' },
+      { name: 'petName', title: 'Paciente' },
+      { name: 'vaccination', title: 'Desparasitación' },
+      {
+        name: 'nextAppointment',
+        title: 'Próx. Turno',
+        className: 'text-nowrap',
+        format: (value) => formatDate(value)
+      }
+    ],
+    getRecords: getInactiveVaccinations,
+    restoreRecord: restoreVaccination,
+    deleteRecord: destroyVaccination
+  },
+  consultas: {
+    fields: [
+      { name: 'date', title: 'Fecha', className: 'text-nowrap' },
+      { name: 'petName', title: 'Paciente' },
+      { name: 'diagnosis', title: 'Diagnóstico' },
+      { name: 'treatment', title: 'Tratamiento' },
+      {
+        name: 'nextAppointment',
+        title: 'Próx. Turno',
+        className: 'text-nowrap',
+        format: (value) => formatDate(value)
+      }
+    ],
+    getRecords: getInactiveConsultations,
+    restoreRecord: restoreConsultation,
+    deleteRecord: destroyConsultation
+  },
+  desparasitaciones: {
+    fields: [
+      { name: 'date', title: 'Fecha', className: 'text-nowrap' },
+      { name: 'petName', title: 'Paciente' },
+      { name: 'deworming', title: 'Desparasitación' },
+      {
+        name: 'nextAppointment',
+        title: 'Próx. Turno',
+        className: 'text-nowrap',
+        format: (value) => formatDate(value)
+      }
+    ],
+    getRecords: getInactiveDewormings,
+    restoreRecord: restoreDeworming,
+    deleteRecord: destroyDeworming
+  }
 }
 
 /*
