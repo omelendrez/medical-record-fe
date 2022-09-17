@@ -208,7 +208,12 @@ export const fieldsDefault = {
   },
   vacunaciones: {
     fields: [
-      { name: 'date', title: 'Fecha', className: 'text-nowrap' },
+      {
+        name: 'date',
+        title: 'Fecha',
+        className: 'text-nowrap',
+        format: (value) => formatDate(value)
+      },
       { name: 'petName', title: 'Paciente' },
       { name: 'vaccination', title: 'Desparasitación' },
       {
@@ -224,7 +229,12 @@ export const fieldsDefault = {
   },
   consultas: {
     fields: [
-      { name: 'date', title: 'Fecha', className: 'text-nowrap' },
+      {
+        name: 'date',
+        title: 'Fecha',
+        className: 'text-nowrap',
+        format: (value) => formatDate(value)
+      },
       { name: 'petName', title: 'Paciente' },
       { name: 'diagnosis', title: 'Diagnóstico' },
       { name: 'treatment', title: 'Tratamiento' },
@@ -241,7 +251,12 @@ export const fieldsDefault = {
   },
   desparasitaciones: {
     fields: [
-      { name: 'date', title: 'Fecha', className: 'text-nowrap' },
+      {
+        name: 'date',
+        title: 'Fecha',
+        className: 'text-nowrap',
+        format: (value) => formatDate(value)
+      },
       { name: 'petName', title: 'Paciente' },
       { name: 'deworming', title: 'Desparasitación' },
       {
