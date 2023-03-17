@@ -6,12 +6,29 @@ import TableHeader from '../table/TableHeader'
 import { getCustomers, deleteCustomer } from '../../services/customers'
 import { readOnly } from '../../helpers'
 
+const filterFields = [
+  {
+    id: 'name',
+    label: 'Nombre'
+  },
+  {
+    id: 'address',
+    label: 'Domicilio'
+  },
+  {
+    id: 'phone',
+    label: 'Teléfono'
+  }
+]
+
 function Customers() {
   const [filter, setFilter] = useState('')
+  const [filterField, setFilterField] = useState('name')
   const paginationDefault = {
     curPage: 1,
     totRecords: 0,
     limit: 10,
+    filterField,
     filter
   }
 
@@ -68,9 +85,13 @@ function Customers() {
     if (!e.target.value) setPagination({ ...pagination, filter: '' })
   }
 
+  const handleFieldChange = (e) => {
+    setFilterField(e.target.id)
+  }
+
   const handleClick = (e) => {
     e.preventDefault()
-    setPagination({ ...pagination, filter, curPage: 1 })
+    setPagination({ ...pagination, filter, filterField, curPage: 1 })
   }
 
   const { rows } = customers
@@ -92,8 +113,11 @@ function Customers() {
       <div className="container-fluid">
         <h3>Clientes</h3>
         <TableHeader
-          handleChange={handleChange}
+          filterFields={filterFields}
+          onChange={handleChange}
+          onFieldChange={handleFieldChange}
           filter={filter}
+          filterField={filterField}
           handleClick={handleClick}
           totPages={totPages}
           pagination={pagination}

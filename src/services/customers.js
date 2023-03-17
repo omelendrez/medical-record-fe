@@ -2,8 +2,8 @@ import http from './api'
 import { getUser } from '../helpers'
 
 const getData = async (url, pagination) => {
-  const { filter, limit, curPage: page } = pagination
-  const response = await http.get(url, { params: { page, filter, limit } })
+  const { filter, filterField, limit, curPage: page } = pagination
+  const response = await http.get(url, { params: { page, filter, filterField, limit } })
   return response.data
 }
 

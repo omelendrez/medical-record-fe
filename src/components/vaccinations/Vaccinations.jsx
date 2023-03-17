@@ -91,7 +91,7 @@ function Vaccinations() {
       <div className="container-fluid">
         <h3>Vacunaciones</h3>
         <TableHeader
-          handleChange={handleChange}
+          onChange={handleChange}
           filter={filter}
           handleClick={handleClick}
           totPages={totPages}
