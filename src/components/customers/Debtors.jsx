@@ -5,7 +5,7 @@ import TableFooter from '../table/TableFooter'
 import Modal from '../Modal'
 import { getDebtors } from '../../services/customers'
 import { savePayment } from '../../services/accounts'
-import { formatAmount, paymentMethods, setToday } from '../../helpers'
+import { formatAmount, paymentMethods, setToday, dateFromNow } from '../../helpers'
 
 function Debtors() {
   const [filter, setFilter] = useState('')
@@ -158,6 +158,7 @@ function Debtors() {
                 <td>{dbt.address}</td>
                 <td>{dbt.phone}</td>
                 <td className="text-right">{formatAmount(dbt.balance)}</td>
+                <td className="text-center">{dateFromNow(dbt.updatedAt)}</td>
                 <td className="text-right">
                   <button
                     type="button"

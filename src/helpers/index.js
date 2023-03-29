@@ -148,6 +148,11 @@ export const formatDate = (date) => {
 
 export const formatDateFull = (dateTime) => moment(dateTime).format('l LT')
 
+export const dateFromNow = (date) => {
+  const results = moment(date).add(3, 'hour').fromNow()
+  return results === 'Fecha inválida' ? '' : results
+}
+
 export const setToday = () => moment(new Date()).format('YYYY-MM-DD')
 
 export const formatDateYMD = (date) =>
