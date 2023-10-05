@@ -4,9 +4,6 @@
   "description": "Medical Record Frontend",
   "private": true,
   "author": "Omar Melendrez <omar.melendrez@gmail.com>",
-  "engines": {
-    "node": "18.x"
-  },
   "keywords": [
     "frontend",
     "veterinary",
