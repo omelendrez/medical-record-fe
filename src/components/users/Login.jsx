@@ -8,7 +8,7 @@ function Login() {
     password: ''
   }
   const [form, setForm] = useState(user)
-  const [error, setError] = useState('')
+  const [error, setError] = useState(null)
 
   const handleChange = (e) => {
     e.preventDefault()
@@ -17,7 +17,7 @@ function Login() {
 
   const handlelogin = (e) => {
     e.preventDefault()
-    setError('')
+    setError(null)
     login(form)
       .then((u) => {
         saveUser(u)
@@ -62,11 +62,11 @@ function Login() {
             <button
               className="btn btn-primary"
               type="button"
-              onClick={(e) => handlelogin(e)}
+              onClick={handlelogin}
             >
               Login
             </button>
-            {error.length > 0 && (
+            {error && (
               <div className="alert alert-danger mt-3" role="alert">
                 {error}
               </div>
