@@ -3,7 +3,9 @@ import { getUser } from '../helpers'
 
 const getData = async (url, pagination) => {
   const { filter, filterField, limit, curPage: page } = pagination
-  const response = await http.get(url, { params: { page, filter, filterField, limit } })
+  const response = await http.get(url, {
+    params: { page, filter, filterField, limit }
+  })
   return response.data
 }
 
@@ -30,6 +32,11 @@ export const getCustomer = async (id) => {
 export const getDebt = async (id) => {
   const response = await http.get(`customers/debtors/${id}`)
   return response.data.debt
+}
+
+export const getTotalDebt = async () => {
+  const response = await http.get('customers/debtors/total-amount')
+  return response.data.debtors
 }
 
 export const saveCustomer = (customer) => {

@@ -3,9 +3,14 @@ import { Link } from 'react-router-dom'
 import TableHeader from '../table/TableHeader'
 import TableFooter from '../table/TableFooter'
 import Modal from '../Modal'
-import { getDebtors } from '../../services/customers'
+import { getDebtors, getTotalDebt } from '../../services/customers'
 import { savePayment } from '../../services/accounts'
-import { formatAmount, paymentMethods, setToday, dateFromNow } from '../../helpers'
+import {
+  formatAmount,
+  paymentMethods,
+  setToday,
+  dateFromNow
+} from '../../helpers'
 
 function Debtors() {
   const [filter, setFilter] = useState('')
@@ -28,15 +33,20 @@ function Debtors() {
     const updateState = () => {
       const pag = pagination
       getDebtors(pagination).then((dbts) => {
-        pag.totRecords = dbts.count.length
-        const newTotal = dbts.rows.reduce((acc, dbt) => acc + dbt.balance, 0)
-        setTotal(newTotal)
+        pag.totRecords = dbts.count
         setPagination(pag)
         setDebtors(dbts)
       })
     }
     updateState()
   }, [pagination])
+
+  useEffect(() => {
+    const updateState = () => {
+      getTotalDebt().then((resp) => setTotal(resp.totalAmount))
+    }
+    updateState()
+  }, [])
 
   const handleChange = (e) => {
     setFilter(e.target.value)
@@ -142,7 +152,7 @@ function Debtors() {
           <tbody>
             {rows.map((dbt) => (
               <tr key={dbt.id}>
-                <td className="name text-uppercase">
+                <td className="name text-uppercase" style={{ width: '14vw' }}>
                   <Link
                     to={{
                       pathname: `/clientes/${dbt.id}`,
@@ -152,13 +162,17 @@ function Debtors() {
                     {dbt.name}
                   </Link>
                 </td>
-                <td className="text-uppercase">
+                <td className="text-uppercase" style={{ width: '16vw' }}>
                   {dbt.pets.map((pet) => pet.name).join(', ')}
                 </td>
-                <td>{dbt.address}</td>
-                <td>{dbt.phone}</td>
-                <td className="text-right">{formatAmount(dbt.balance)}</td>
-                <td className="text-center">{dateFromNow(dbt.updatedAt)}</td>
+                <td style={{ width: '14vw' }}>{dbt.address}</td>
+                <td style={{ width: '12vw' }}>{dbt.phone}</td>
+                <td className="text-right" style={{ width: '12vw' }}>
+                  {formatAmount(dbt.balance)}
+                </td>
+                <td className="text-center" style={{ width: '12vw' }}>
+                  {dateFromNow(dbt.updatedAt)}
+                </td>
                 <td className="text-right">
                   <button
                     type="button"
