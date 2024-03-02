@@ -170,6 +170,7 @@ function Debtors() {
                 <td className="text-right" style={{ width: '12vw' }}>
                   {formatAmount(dbt.balance)}
                 </td>
+                <td className="text-center">{dbt.customerStatus}</td>
                 <td className="text-center" style={{ width: '12vw' }}>
                   {dateFromNow(dbt.updatedAt)}
                 </td>
