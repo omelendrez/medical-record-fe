@@ -23,18 +23,24 @@ import Restore from './components/Restore'
 import Calendar from './components/Calendar'
 import Appointments from './components/Appointments'
 
+import Documents from './components/documents/Documents'
+import DocumentAdd from './components/documents/DocumentAdd'
+
 function Routes() {
   return (
     <Switch>
       <Route path="/" component={Home} exact />
+
       <Route path="/clientes" exact component={Customers} />
       <Route path="/clientes/:id" exact component={CustomerView} />
       <Route path="/clientes/:id/:petId" exact component={CustomerView} />
       <Route path="/nuevo-cliente" component={CustomerAdd} />
       <Route path="/edit-cliente/:id" exact component={CustomerEdit} />
+
       <Route path="/pacientes" exact component={Pets} />
       <Route path="/nuevo-paciente/:id" exact component={PetAdd} />
       <Route path="/edit-paciente/:id" exact component={PetEdit} />
+
       <Route path="/consultas" component={Consultations} />
       <Route
         path="/edit-consulta/:consultationId"
@@ -46,8 +52,11 @@ function Routes() {
         exact
         component={ConsultationAdd}
       />
+
       <Route path="/restaurar/:table" exact component={Restore} />
+
       <Route path="/deudores" exact component={Debtors} />
+
       <Route path="/desparasitaciones" exact component={Dewormings} />
       <Route
         path="/edit-desparasitacion/:dewormingId"
@@ -59,6 +68,15 @@ function Routes() {
         exact
         component={DewormingAdd}
       />
+
+      <Route path="/documentos" exact component={Documents} />
+
+      <Route
+        path="/nuevo-documento/:customerId/:petId"
+        exact
+        component={DocumentAdd}
+      />
+
       <Route path="/vacunaciones" exact component={Vaccinations} />
       <Route path="/edit-vacunacion/:id" exact component={VaccinationEdit} />
       <Route
@@ -66,7 +84,9 @@ function Routes() {
         exact
         component={VaccinationAdd}
       />
+
       <Route path="/calendario" exact component={Calendar} />
+
       <Route path="/turnos" exact component={Appointments} />
     </Switch>
   )

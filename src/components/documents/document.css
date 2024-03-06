@@ -1,0 +1,9 @@
+.document-row td {
+  vertical-align: top !important;
+}
+
+.document-row .view-pdf {
+  font-size: 2rem;
+  margin: 0 2rem;
+  color: var(--primary);
+}

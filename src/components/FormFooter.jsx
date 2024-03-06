@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { getApointmentFromDays } from '../helpers'
+import { getAppointmentFromDays } from '../helpers'
 
 function FormFooter({ form, handleChange }) {
   const [days, setDays] = useState('')
@@ -10,7 +10,7 @@ function FormFooter({ form, handleChange }) {
     const event = {
       target: {
         id: 'nextAppointment',
-        value: getApointmentFromDays(e.target.value, form.date)
+        value: getAppointmentFromDays(e.target.value, form.date)
       },
       preventDefault: () => {}
     }

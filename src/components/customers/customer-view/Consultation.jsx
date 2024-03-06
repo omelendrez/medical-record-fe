@@ -8,7 +8,15 @@ import {
   readOnly
 } from '../../../helpers'
 
-function Consultation({ consultation, editConsultation, deleteConsultation }) {
+import './consultation.css'
+
+function Consultation({
+  consultation,
+  editConsultation,
+  deleteConsultation,
+  editLabel,
+  deleteLabel
+}) {
   const {
     id,
     date,
@@ -23,9 +31,15 @@ function Consultation({ consultation, editConsultation, deleteConsultation }) {
     vaccination,
     deworming,
     treatmentStage,
+    petId,
+    description,
     userName,
     updatedAt
   } = consultation
+
+  const fileName = `${petId}-${id}.pdf`
+
+  const url = `${process.env.REACT_APP_DOCUMENTS_URL}/additional-tests/${fileName}`
 
   return (
     <div className="card consultation pb-2">
@@ -36,6 +50,32 @@ function Consultation({ consultation, editConsultation, deleteConsultation }) {
         </div>
         {!readOnly() && amount > 0 && <Balance amount={amount} paid={paid} />}
         <h6 className="card-title">{formatDate(date)}</h6>
+        {description && (
+          <p className="card-text">
+            <b>Documento</b>: {fileName}
+          </p>
+        )}
+
+        {description && (
+          <p className="card-text">
+            <b>Descripción</b>: {description}
+          </p>
+        )}
+        {description && (
+          <figure>
+            <object
+              data={url}
+              type="application/pdf"
+              className="document-preview"
+            >
+              <embed
+                src={url}
+                type="application/pdf"
+                className="document-preview"
+              />
+            </object>
+          </figure>
+        )}
         {anamnesis && (
           <p className="card-text">
             <b>Anamnesis</b>: {anamnesis}
@@ -43,7 +83,7 @@ function Consultation({ consultation, editConsultation, deleteConsultation }) {
         )}
         {clinicalExamination && (
           <p className="card-text">
-            <b>Examen Clinico</b>: {clinicalExamination}
+            <b>Examen Clínico</b>: {clinicalExamination}
           </p>
         )}
         {diagnosis && (
@@ -84,19 +124,21 @@ function Consultation({ consultation, editConsultation, deleteConsultation }) {
       </div>
       {!readOnly() && (
         <div className="mx-3">
-          <button
-            type="button"
-            className="btn btn-info m-1"
-            onClick={() => editConsultation(id)}
-          >
-            Modificar
-          </button>
+          {!description && (
+            <button
+              type="button"
+              className="btn btn-info m-1"
+              onClick={() => editConsultation(id)}
+            >
+              {editLabel || 'Modificar'}
+            </button>
+          )}
           <button
             type="button"
             className="btn btn-danger m-1 float-right"
             onClick={() => deleteConsultation(consultation)}
           >
-            Desactivar
+            {deleteLabel || 'Desactivar'}
           </button>
         </div>
       )}
@@ -104,10 +146,19 @@ function Consultation({ consultation, editConsultation, deleteConsultation }) {
   )
 }
 
+Consultation.defaultProps = {
+  editConsultation: undefined,
+  deleteConsultation: undefined,
+  editLabel: undefined,
+  deleteLabel: undefined
+}
+
 Consultation.propTypes = {
   consultation: PropTypes.shape({
     id: PropTypes.number,
+    petId: PropTypes.number,
     date: PropTypes.string,
+    description: PropTypes.string,
     anamnesis: PropTypes.string,
     clinicalExamination: PropTypes.string,
     diagnosis: PropTypes.string,
@@ -122,8 +173,10 @@ Consultation.propTypes = {
     userName: PropTypes.string,
     updatedAt: PropTypes.string
   }).isRequired,
-  editConsultation: PropTypes.func.isRequired,
-  deleteConsultation: PropTypes.func.isRequired
+  editConsultation: PropTypes.func,
+  deleteConsultation: PropTypes.func,
+  editLabel: PropTypes.string,
+  deleteLabel: PropTypes.string
 }
 
 export default Consultation
