@@ -26,6 +26,7 @@ function TabItem({ option, title, current, setCurrent, className }) {
 }
 
 function CustomerView(props) {
+  const isReadOnlyUser = readOnly()
   const [redirect, setRedirect] = useState('')
   const [customer, setCustomer] = useState({ pets: [] })
   const [pet, setPet] = useState({})
@@ -62,8 +63,8 @@ function CustomerView(props) {
       setCurrent('consultas')
     }
 
-    getCustomer(id).then((cust) => {
-      setCustomer(cust)
+    getCustomer(id).then((res) => {
+      setCustomer(res)
       const p = { id: petId }
       if (petId) {
         selectPet(p)
@@ -96,6 +97,15 @@ function CustomerView(props) {
   const handleAddDeworming = () => {
     setRedirect({
       pathname: `/nueva-desparasitacion/${customer.id}/${pet.id}`,
+      state: {
+        from: `/clientes/${customer.id}/${pet.id}`
+      }
+    })
+  }
+
+  const handleAddDocument = () => {
+    setRedirect({
+      pathname: `/nuevo-documento/${customer.id}/${pet.id}`,
       state: {
         from: `/clientes/${customer.id}/${pet.id}`
       }
@@ -149,8 +159,15 @@ function CustomerView(props) {
                   current={current}
                   setCurrent={setCurrent}
                 />
+                <TabItem
+                  className="d-none d-sm-block"
+                  option="documentos"
+                  title="Exámenes Complementarios"
+                  current={current}
+                  setCurrent={setCurrent}
+                />
               </ul>
-              {!readOnly() && (
+              {!isReadOnlyUser && (
                 <div className="flex-last">
                   {current === 'consultas' && (
                     <button
@@ -177,6 +194,15 @@ function CustomerView(props) {
                       onClick={(e) => handleAddDeworming(e)}
                     >
                       + Desparasitación
+                    </button>
+                  )}
+                  {current === 'documentos' && (
+                    <button
+                      type="button"
+                      className="btn btn-primary btn-block"
+                      onClick={(e) => handleAddDocument(e)}
+                    >
+                      + Documento
                     </button>
                   )}
                 </div>

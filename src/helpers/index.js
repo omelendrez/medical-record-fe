@@ -120,7 +120,7 @@ export const getDateFromDays = (days) => {
   return moment(d).format('YYYY-MM-DD')
 }
 
-export const getApointmentFromDays = (days, date) => {
+export const getAppointmentFromDays = (days, date) => {
   if (days < 1) {
     return ''
   }
@@ -190,7 +190,15 @@ export const fieldsDefault = {
   clientes: {
     fields: [
       { name: 'name', title: 'Nombre', format: (value) => value.toUpperCase() },
-      { name: 'address', title: 'Domicilio', format: (value) => value.split(' ').map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') },
+      {
+        name: 'address',
+        title: 'Domicilio',
+        format: (value) =>
+          value
+            .split(' ')
+            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' ')
+      },
       { name: 'phone', title: 'Teléfono' },
       { name: 'email', title: 'Email' },
       { name: 'observations', title: 'Observaciones' }
@@ -202,8 +210,24 @@ export const fieldsDefault = {
   pacientes: {
     fields: [
       { name: 'name', title: 'Nombre', format: (value) => value.toUpperCase() },
-      { name: 'type', title: 'Tipo', format: (value) => value.split(' ').map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') },
-      { name: 'breed', title: 'Raza', format: (value) => value.split(' ').map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') },
+      {
+        name: 'type',
+        title: 'Tipo',
+        format: (value) =>
+          value
+            .split(' ')
+            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' ')
+      },
+      {
+        name: 'breed',
+        title: 'Raza',
+        format: (value) =>
+          value
+            .split(' ')
+            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' ')
+      },
       { name: 'sex', title: 'Sexo' },
       { name: 'observations', title: 'Observaciones' }
     ],
@@ -219,7 +243,11 @@ export const fieldsDefault = {
         className: 'text-nowrap',
         format: (value) => formatDate(value)
       },
-      { name: 'petName', title: 'Paciente', format: (value) => value.toUpperCase() },
+      {
+        name: 'petName',
+        title: 'Paciente',
+        format: (value) => value.toUpperCase()
+      },
       { name: 'vaccination', title: 'Desparasitación' },
       {
         name: 'nextAppointment',
@@ -240,7 +268,11 @@ export const fieldsDefault = {
         className: 'text-nowrap',
         format: (value) => formatDate(value)
       },
-      { name: 'petName', title: 'Paciente', format: (value) => value.toUpperCase() },
+      {
+        name: 'petName',
+        title: 'Paciente',
+        format: (value) => value.toUpperCase()
+      },
       { name: 'diagnosis', title: 'Diagnóstico' },
       { name: 'treatment', title: 'Tratamiento' },
       {
@@ -263,7 +295,9 @@ export const fieldsDefault = {
         format: (value) => formatDate(value)
       },
       {
-        name: 'petName', title: 'Paciente', format: (value) => value.toUpperCase()
+        name: 'petName',
+        title: 'Paciente',
+        format: (value) => value.toUpperCase()
       },
       { name: 'deworming', title: 'Desparasitación' },
       {

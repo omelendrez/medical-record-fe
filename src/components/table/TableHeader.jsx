@@ -4,6 +4,7 @@ import Pagination from '../Pagination'
 import { readOnly } from '../../helpers'
 import './TableHeader.css'
 
+const smallDevice = window.innerWidth < 768
 export default function TableHeader({
   filterFields,
   onChange,
@@ -15,7 +16,7 @@ export default function TableHeader({
   changePage,
   handleRestore
 }) {
-  const smallDevice = window.innerWidth < 768
+  const isReadOnlyUser = readOnly()
 
   const handleFilterChange = (e) => {
     onChange(e)
@@ -30,10 +31,27 @@ export default function TableHeader({
       <div className="form-inline">
         {filterFields.length > 0 && (
           <div className="input-group-prepend">
-            <button className="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Buscar por </button>
+            <button
+              className="btn btn-outline-secondary dropdown-toggle"
+              type="button"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              Buscar por{' '}
+            </button>
             <div className="dropdown-menu" onClick={handleFilterFieldChange}>
               {filterFields.map((fld) => (
-                <button type="button" key={fld.id} id={fld.id} className={`dropdown-item ${fld.id === filterField ? 'active' : ''}`}>{fld.label}</button>
+                <button
+                  type="button"
+                  key={fld.id}
+                  id={fld.id}
+                  className={`dropdown-item ${
+                    fld.id === filterField ? 'active' : ''
+                  }`}
+                >
+                  {fld.label}
+                </button>
               ))}
             </div>
           </div>
@@ -55,27 +73,23 @@ export default function TableHeader({
           Buscar
         </button>
       </div>
-      {
-        !smallDevice && (
-          <div>
-            <Pagination pagination={pagination} changePage={changePage} />
-          </div>
-        )
-      }
+      {!smallDevice && (
+        <div>
+          <Pagination pagination={pagination} changePage={changePage} />
+        </div>
+      )}
 
-      {
-        !readOnly() && handleRestore && (
-          <div>
-            <button
-              type="button"
-              className="btn btn-outline-secondary"
-              onClick={() => handleRestore()}
-            >
-              Restaurar
-            </button>
-          </div>
-        )
-      }
+      {!isReadOnlyUser && handleRestore && (
+        <div>
+          <button
+            type="button"
+            className="btn btn-outline-secondary"
+            onClick={() => handleRestore()}
+          >
+            Restaurar
+          </button>
+        </div>
+      )}
     </div>
   )
 }

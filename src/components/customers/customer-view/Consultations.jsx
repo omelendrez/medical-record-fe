@@ -16,6 +16,12 @@ import {
   getDewormingsByPet,
   deleteDeworming
 } from '../../../services/dewormings'
+import {
+  getDocumentsByPet,
+  deleteDocument,
+  deleteFile
+} from '../../../services/documents'
+
 import { formatDate } from '../../../helpers'
 
 function Consultations({ customer, pet, current }) {
@@ -23,10 +29,12 @@ function Consultations({ customer, pet, current }) {
   const [selected, setSelected] = useState({})
   const [showConfirm, setShowConfirm] = useState(false)
   const [records, setRecords] = useState({ rows: [], count: 0 })
+  const [isDocument, setIsDocument] = useState(false)
 
   useEffect(() => {
     const getData = async () => {
       let rec
+      setIsDocument(false)
       switch (current) {
         case 'consultas':
           rec = await getConsultationsByPet(pet.id)
@@ -39,6 +47,11 @@ function Consultations({ customer, pet, current }) {
         case 'desparasitaciones':
           rec = await getDewormingsByPet(pet.id)
           setRecords(rec)
+          break
+        case 'documentos':
+          rec = await getDocumentsByPet(pet.id)
+          setRecords(rec)
+          setIsDocument(true)
           break
         case 'descarga-historial-medico': {
           const consultas = await getConsultationsByPet(pet.id)
@@ -81,6 +94,7 @@ function Consultations({ customer, pet, current }) {
     setSelected(consultation)
     setShowConfirm(true)
   }
+  const fileName = `${pet.id}-${selected.id}.pdf`
 
   const confirmDelete = () => {
     switch (current) {
@@ -106,6 +120,16 @@ function Consultations({ customer, pet, current }) {
             setRecords(rec)
             setShowConfirm(false)
           })
+        )
+        break
+      case 'documentos':
+        deleteFile(fileName).then(() =>
+          deleteDocument(selected).then(() =>
+            getDocumentsByPet(pet.id).then((rec) => {
+              setRecords(rec)
+              setShowConfirm(false)
+            })
+          )
         )
         break
       default:
@@ -147,8 +171,9 @@ function Consultations({ customer, pet, current }) {
               <Consultation
                 key={consultation.id}
                 consultation={consultation}
-                editConsultation={handleEditConsultation}
+                editConsultation={!isDocument ? handleEditConsultation : null}
                 deleteConsultation={handleDeleteConsultation}
+                deleteLabel={isDocument ? 'Eliminar' : null}
               />
             ))}
         </div>

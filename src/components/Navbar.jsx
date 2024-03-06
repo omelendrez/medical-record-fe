@@ -49,6 +49,7 @@ function Navbar() {
           <NavLink to="/consultas">Consultas</NavLink>
           <NavLink to="/vacunaciones">Vacunaciones</NavLink>
           <NavLink to="/desparasitaciones">Desparasitaciones</NavLink>
+          <NavLink to="/documentos">Examenes Complementarios</NavLink>
           {!disabled && <NavLink to="/deudores">Deudores</NavLink>}
         </ul>
         <div className="text-white mr-2 text-capitalize">{user.name}</div>
