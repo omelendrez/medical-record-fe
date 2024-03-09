@@ -16,11 +16,12 @@ export const getDocuments = async (pagination) => {
   return response.data.documents
 }
 
-export const saveDocument = (pet) => {
+export const saveDocument = (document) => {
   const user = getUser()
   const userId = user.id
-  const url = pet.id ? `documents/${pet.id}` : 'documents'
-  const payload = { ...pet, userId, id: undefined }
+  const url = document.id ? `documents/${document.id}` : 'documents'
+  const payload = { ...document, userId, id: undefined }
+
   return new Promise((resolve, reject) => {
     api
       .post(url, payload)

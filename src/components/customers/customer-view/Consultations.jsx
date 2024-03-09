@@ -94,7 +94,7 @@ function Consultations({ customer, pet, current }) {
     setSelected(consultation)
     setShowConfirm(true)
   }
-  const fileName = `${pet.id}-${selected.id}.pdf`
+  const fileName = `${selected.customerId}-${selected.petId}-${selected.id}.${selected.ext}`
 
   const confirmDelete = () => {
     switch (current) {

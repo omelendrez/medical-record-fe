@@ -20,17 +20,19 @@ function Document({
     description,
     petId,
     customerId,
+    ext,
     updatedAt,
     userName
   } = data
 
-  const fileName = `${petId}-${id}.pdf`
+  const fileName = `${customerId}-${petId}-${id}.${ext}`
+
   const url = `${process.env.REACT_APP_DOCUMENTS_URL}/additional-tests/${fileName}`
 
   return (
     <tr className="document-row">
-      <td>{fileName}</td>
       <td className="text-nowrap">{formatDate(date)}</td>
+      <td className="text-uppercase">{customerName}</td>
       <td className="text-uppercase">
         <Link
           to={{
@@ -41,7 +43,7 @@ function Document({
           {petName}
         </Link>
       </td>
-      <td className="text-uppercase">{customerName}</td>
+      <td className="file-name">{fileName}</td>
       <td>{description}</td>
 
       <td>
