@@ -22,7 +22,8 @@ function DocumentAdd(props) {
     customerId,
     petId,
     date: setToday(),
-    description: ''
+    description: '',
+    ext: ''
   })
 
   const [pet, setPet] = useState({})
@@ -52,6 +53,8 @@ function DocumentAdd(props) {
     if (e.target.files) {
       const file = e.target.files[0]
       setSelectedFile(file)
+      const ext = file.name.split('.').pop()
+      setForm((f) => ({ ...f, ext }))
     }
   }
 
@@ -61,7 +64,7 @@ function DocumentAdd(props) {
     saveDocument(form)
       .then((res) => {
         const { id } = res.record
-        const name = `${petId}-${id}`
+        const name = `${customerId}-${petId}-${id}`
 
         const formData = new FormData()
         formData.append('file', selectedFile)

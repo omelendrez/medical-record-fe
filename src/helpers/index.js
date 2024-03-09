@@ -1,6 +1,8 @@
 /* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable import/no-cycle */
+
 import moment from 'moment'
+
 import {
   getInactiveCustomers,
   restoreCustomer,
@@ -23,6 +25,26 @@ import {
   destroyVaccination
 } from '../services/vaccinations'
 import 'moment/locale/es'
+
+const MIME_TYPES = [
+  {
+    ext: 'pdf',
+    type: 'application/pdf'
+  },
+  {
+    ext: 'docx',
+    type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+  }
+]
+
+export const getFileName = (name, file) => {
+  const ext = file.originalname.split('.').pop()
+  const fileName = `${name}.${ext.toLowerCase()}`
+  return fileName
+}
+
+export const getMimeType = (ext) =>
+  MIME_TYPES.find((e) => e.extension === ext)?.type
 
 export const daysNames = [
   'Domingo',

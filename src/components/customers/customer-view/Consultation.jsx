@@ -5,7 +5,8 @@ import {
   formatDate,
   getTreatmentStage,
   formatDateFull,
-  readOnly
+  readOnly,
+  getMimeType
 } from '../../../helpers'
 
 import './consultation.css'
@@ -31,15 +32,19 @@ function Consultation({
     vaccination,
     deworming,
     treatmentStage,
+    customerId,
     petId,
+    ext,
     description,
     userName,
     updatedAt
   } = consultation
 
-  const fileName = `${petId}-${id}.pdf`
+  const fileName = `${customerId}-${petId}-${id}.${ext}`
 
   const url = `${process.env.REACT_APP_DOCUMENTS_URL}/additional-tests/${fileName}`
+
+  const mimeType = ext ? getMimeType(ext) : null
 
   return (
     <div className="card consultation pb-2">
@@ -63,16 +68,8 @@ function Consultation({
         )}
         {description && (
           <figure>
-            <object
-              data={url}
-              type="application/pdf"
-              className="document-preview"
-            >
-              <embed
-                src={url}
-                type="application/pdf"
-                className="document-preview"
-              />
+            <object data={url} type={mimeType} className="document-preview">
+              <embed src={url} type={mimeType} className="document-preview" />
             </object>
           </figure>
         )}
@@ -156,8 +153,10 @@ Consultation.defaultProps = {
 Consultation.propTypes = {
   consultation: PropTypes.shape({
     id: PropTypes.number,
+    customerId: PropTypes.number,
     petId: PropTypes.number,
     date: PropTypes.string,
+    ext: PropTypes.string,
     description: PropTypes.string,
     anamnesis: PropTypes.string,
     clinicalExamination: PropTypes.string,

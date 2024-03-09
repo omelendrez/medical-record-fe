@@ -5,8 +5,7 @@ import Confirm from '../Confirm'
 import {
   getDocuments,
   deleteDocument,
-  deleteFile,
-  getDocumentsByPet
+  deleteFile
 } from '../../services/documents'
 
 function Documents() {
@@ -49,7 +48,7 @@ function Documents() {
     const fileName = `${selected.petId}-${selected.id}.pdf`
     deleteFile(fileName).then(() =>
       deleteDocument(selected).then(() =>
-        getDocumentsByPet(selected.petId).then((docs) => {
+        getDocuments(pagination).then((docs) => {
           setDocuments(docs)
           setShowConfirm(false)
         })
@@ -96,11 +95,11 @@ function Documents() {
         <table className="table table-sm table-responsive">
           <thead>
             <tr>
-              <th scope="col">#</th>
               <th scope="col">Fecha</th>
-              <th scope="col">Paciente</th>
               <th scope="col">Cliente</th>
+              <th scope="col">Paciente</th>
               <th scope="col">Documento</th>
+              <th scope="col">Referencia</th>
               <th scope="col" colSpan="3">
                 &nbsp;
               </th>
