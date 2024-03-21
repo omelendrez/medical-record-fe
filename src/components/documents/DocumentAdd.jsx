@@ -116,7 +116,7 @@ function DocumentAdd(props) {
                     disabled={!form.description}
                     onChange={(e) => handleFileChange(e)}
                     type="file"
-                    accept={MIME_TYPES.map((m) => m.type).join(' ')}
+                    accept={MIME_TYPES.map((m) => m.type).join(',')}
                     className="mt-3"
                   />
                 </div>
