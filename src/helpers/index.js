@@ -34,6 +34,10 @@ const MIME_TYPES = [
   {
     ext: 'docx',
     type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+  },
+  {
+    ext: 'doc',
+    type: 'application/msword'
   }
 ]
 
