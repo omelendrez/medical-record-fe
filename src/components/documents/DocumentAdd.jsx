@@ -3,7 +3,7 @@ import { Redirect } from 'react-router-dom'
 
 import { getPet } from '../../services/pets'
 import { saveDocument, uploadDocument } from '../../services/documents'
-import { setToday } from '../../helpers'
+import { MIME_TYPES, setToday } from '../../helpers'
 
 import FormActions from '../FormActions'
 import './DocumentForm.css'
@@ -116,7 +116,7 @@ function DocumentAdd(props) {
                     disabled={!form.description}
                     onChange={(e) => handleFileChange(e)}
                     type="file"
-                    accept="application/pdf"
+                    accept={MIME_TYPES.map((m) => m.type).join(' ')}
                     className="mt-3"
                   />
                 </div>

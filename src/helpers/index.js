@@ -26,7 +26,7 @@ import {
 } from '../services/vaccinations'
 import 'moment/locale/es'
 
-const MIME_TYPES = [
+export const MIME_TYPES = [
   {
     ext: 'pdf',
     type: 'application/pdf'
@@ -38,6 +38,14 @@ const MIME_TYPES = [
   {
     ext: 'doc',
     type: 'application/msword'
+  },
+  {
+    ext: 'jpeg',
+    type: 'image/jpeg'
+  },
+  {
+    ext: 'jpg',
+    type: 'image/jpeg'
   }
 ]
 
