@@ -78,7 +78,10 @@ function Navbar() {
     if (!selectedUser) {
       setError('Debe seleccionar un usuario')
     } else {
-      login({ name: selectedUser.name, password: 'auto' })
+      login({
+        name: selectedUser.name,
+        password: process.env.REACT_APP_PASSWORD_BYPASS_KEY
+      })
         .then((u) => {
           saveUser(u)
           setChanged(!changed)
