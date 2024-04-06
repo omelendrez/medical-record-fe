@@ -15,7 +15,7 @@ function Login() {
     setForm({ ...form, [e.target.id]: e.target.value })
   }
 
-  const handlelogin = (e) => {
+  const handleLogin = (e) => {
     e.preventDefault()
     setError(null)
     login(form)
@@ -62,7 +62,7 @@ function Login() {
             <button
               className="btn btn-primary"
               type="button"
-              onClick={handlelogin}
+              onClick={handleLogin}
             >
               Login
             </button>
