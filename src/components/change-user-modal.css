@@ -1,0 +1,23 @@
+.change-user-modal-list {
+  display: flex;
+  gap: 1rem;
+}
+
+.local-modal-footer {
+  display: flex;
+  justify-content: space-around;
+}
+
+.change-user-modal-list div {
+  padding: 0.25rem 1rem;
+  font-size: 1.2rem;
+  text-transform: capitalize;
+  cursor: pointer;
+  width: fit-content;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.change-user-modal-list div:hover {
+  background-color: rgba(23, 162, 184, 0.2);
+}

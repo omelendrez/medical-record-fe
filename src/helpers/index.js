@@ -347,6 +347,8 @@ export const fieldsDefault = {
   }
 }
 
+export const SMALL_DEVICE_WIDTH = 992
+
 /*
 
 SELECT JSON_ARRAYAGG(JSON_OBJECT('name', name, 'phone', phone)) from customers;
