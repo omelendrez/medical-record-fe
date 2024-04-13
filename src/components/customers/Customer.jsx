@@ -20,7 +20,7 @@ function Customer({ data, deleteCustomer, editCustomer }) {
       </td>
       <td>{address}</td>
       <td>{phone}</td>
-      <td>{observations}</td>
+      <td className="small">{observations}</td>
       <td className="text-center text-capitalize small">
         <div>{userName || ''}</div>
         <div>{formatDateFull(updatedAt)}</div>
