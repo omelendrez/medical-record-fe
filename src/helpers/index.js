@@ -210,7 +210,7 @@ export const logout = () => {
 
 export const saveUser = (user) => {
   localStorage.setItem('user', JSON.stringify(user))
-  window.location.href = '/'
+  // window.location.href = '/'
 }
 
 export const getUser = () => JSON.parse(localStorage.getItem('user'))
